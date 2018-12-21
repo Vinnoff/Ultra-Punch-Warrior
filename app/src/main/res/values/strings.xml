@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PunchWarrior</string>
+		<string name="title_level_selection">Choose your opponent</string>
+		<string name="title_scores">Scores</string>
+</resources>
