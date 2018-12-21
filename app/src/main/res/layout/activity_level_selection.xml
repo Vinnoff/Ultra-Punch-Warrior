@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+
+		<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@color/transparent_high_black"
+				android:padding="15dp"
+				android:text="@string/title_level_selection"
+				android:textAlignment="center"
+				android:textSize="25sp" />
+
+		<android.support.v7.widget.RecyclerView
+				android:id="@+id/levels_recycler_view"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				tools:itemCount="10"
+				tools:layoutManager="GridLayoutManager"
+				tools:listitem="@layout/item_oponent"
+				tools:spanCount="4" />
+</LinearLayout>
