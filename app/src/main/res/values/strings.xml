@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PunchWarrior</string>
+	<string name="app_name">Ultra Punch Warrior</string>
 		<string name="title_level_selection">Choose your opponent</string>
-		<string name="title_scores">Scores</string>
+	<string name="title_scores">Hall Of Fame</string>
 </resources>
