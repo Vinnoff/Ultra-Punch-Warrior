@@ -4,10 +4,12 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import balekouy.industries.punchwarrior.data.database.RoomContract
 
-@Entity(tableName = RoomContract.TABLE_PLACE)
-data class EPlace(
-    var name: String,
-    var imageId: Int
+@Entity(tableName = RoomContract.TABLE_LEVEL)
+data class ELevel(
+    val fighterId: Int,
+    var placeName: String,
+    var placeImageId: Int,
+    val unlocked: Boolean = false
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

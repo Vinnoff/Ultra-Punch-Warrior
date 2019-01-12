@@ -2,7 +2,7 @@ package balekouy.industries.punchwarrior.data
 
 import balekouy.industries.punchwarrior.R
 import balekouy.industries.punchwarrior.data.database.entity.EFighter
-import balekouy.industries.punchwarrior.data.database.entity.EPlace
+import balekouy.industries.punchwarrior.data.database.entity.ELevel
 import balekouy.industries.punchwarrior.data.database.entity.EScore
 
 
@@ -17,9 +17,13 @@ object DataProvider {
         EFighter("Final Opponent", 10, 10, 10, 10, R.drawable.profile_goku)
     )
 
-    fun createPlaces(): List<EPlace> = listOf(
-        EPlace("Simple Ring", R.drawable.background_home),
-        EPlace("Simple Ring", R.drawable.background_home)
+    fun createLevels(): List<ELevel> = listOf(
+        ELevel(1, "Simple Ring", R.drawable.background_home, true),
+        ELevel(2, "Simple Ring", R.drawable.background_home, true),
+        ELevel(3, "Simple Ring", R.drawable.background_home, true),
+        ELevel(4, "Simple Ring", R.drawable.background_home),
+        ELevel(5, "Simple Ring", R.drawable.background_home),
+        ELevel(6, "Simple Ring", R.drawable.background_home)
     )
 
     fun createScores(): List<EScore> = listOf(

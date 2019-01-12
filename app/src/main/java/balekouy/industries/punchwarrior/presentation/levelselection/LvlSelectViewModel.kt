@@ -1,11 +1,11 @@
-package balekouy.industries.punchwarrior.presentation.scores
+package balekouy.industries.punchwarrior.presentation.levelselection
 
 import android.arch.lifecycle.MutableLiveData
-import balekouy.industries.punchwarrior.data.models.Score
+import balekouy.industries.punchwarrior.data.models.Level
 import balekouy.industries.punchwarrior.di.UltraPunchWarriorApplication
 import balekouy.industries.punchwarrior.domain.DataResponse
 import balekouy.industries.punchwarrior.domain.ErrorResponse
-import balekouy.industries.punchwarrior.domain.scores.ScoresUseCase
+import balekouy.industries.punchwarrior.domain.scores.LvlSelectUseCase
 import balekouy.industries.punchwarrior.presentation.BaseViewModel
 import balekouy.industries.punchwarrior.presentation.BaseViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,30 +13,29 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ScoresViewModel : BaseViewModel() {
-
+class LvlSelectViewModel : BaseViewModel() {
     companion object {
-        private const val TAG = "ScoresViewModel"
+        private const val TAG = "LvlSelectViewModel"
     }
 
     @Inject
-    lateinit var scoresUseCase: ScoresUseCase
+    lateinit var lvlUseCase: LvlSelectUseCase
 
     private val compositeDisposable = CompositeDisposable()
 
     private val liveState: MutableLiveData<BaseViewState> = MutableLiveData()
-    private val liveListScore: MutableLiveData<List<Score>> = MutableLiveData()
+    private val liveListLevel: MutableLiveData<List<Pair<Int, Level>>> = MutableLiveData()
 
     init {
         initializeDagger(this)
         liveState.value = BaseViewState(isLoading = true, isError = false)
-        val disposable = scoresUseCase.getAllScores()
+        val disposable = lvlUseCase.getLevels()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ list ->
                 when (list) {
                     is DataResponse -> {
-                        liveListScore.value = list.data.map { it.second }
+                        liveListLevel.value = list.data
                         liveState.value = liveState.value?.copy(isLoading = false, isError = false)
                     }
                     is ErrorResponse -> {
@@ -47,11 +46,12 @@ class ScoresViewModel : BaseViewModel() {
                 super.setError(liveState, t, TAG)
             }
         compositeDisposable.add(disposable)
+
     }
 
-    private fun initializeDagger(viewModel: ScoresViewModel) =
+    private fun initializeDagger(viewModel: LvlSelectViewModel) =
         UltraPunchWarriorApplication.appComponent.inject(viewModel)
 
     fun getLiveDataState() = liveState
-    fun getLiveDataScores() = liveListScore
+    fun getLiveDataLevels() = liveListLevel
 }

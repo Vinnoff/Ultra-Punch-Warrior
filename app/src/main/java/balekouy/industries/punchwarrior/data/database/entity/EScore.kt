@@ -4,10 +4,10 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import balekouy.industries.punchwarrior.data.database.RoomContract
 
-@Entity(tableName = RoomContract.TABLE_SCORES)
+@Entity(tableName = RoomContract.TABLE_SCORE)
 data class EScore(
     var name: String,
-    var fighter: Int?,
+    var fighterId: Int,
     var difficulty: Int,
     var score: Int
 ) {

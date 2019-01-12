@@ -1,44 +1,43 @@
-package balekouy.industries.punchwarrior.presentation.scores
+package balekouy.industries.punchwarrior.presentation.levelselection
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.GridLayoutManager
 import android.widget.Toast
 import balekouy.industries.punchwarrior.R
-import balekouy.industries.punchwarrior.data.models.Score
+import balekouy.industries.punchwarrior.data.models.Level
 import balekouy.industries.punchwarrior.presentation.BaseActivity
-import kotlinx.android.synthetic.main.activity_scores.*
+import kotlinx.android.synthetic.main.activity_level_selection.*
 
-class ScoresActivity : BaseActivity(R.layout.activity_scores) {
+class LvlSelectActivity : BaseActivity(R.layout.activity_level_selection) {
     companion object {
         fun newIntent(context: Context): Intent {
-            return Intent(context, ScoresActivity::class.java)
+            return Intent(context, LvlSelectActivity::class.java)
         }
+
+        private const val FIGHTER_PER_LINES = 4
     }
 
-    private lateinit var viewModel: ScoresViewModel
-    private lateinit var adapter: ScoresAdapter
+    private lateinit var viewModel: LvlSelectViewModel
+    private lateinit var adapter: LvlSelectAdapter
 
 
     override fun initUI() {
-        scores_back.setOnClickListener { onBackPressed() }
+        lvl_select_back.setOnClickListener { onBackPressed() }
         initRecyclerView()
     }
 
     private fun initRecyclerView() {
-        val linearLayoutManager = LinearLayoutManager(baseContext)
-        scores_recycler_view.layoutManager = linearLayoutManager
-        scores_recycler_view.adapter = ScoresAdapter(baseContext, mutableListOf())
-        val dividerItemDecoration = DividerItemDecoration(scores_recycler_view.context, linearLayoutManager.orientation)
-        scores_recycler_view.addItemDecoration(dividerItemDecoration)
-        adapter = scores_recycler_view.adapter as ScoresAdapter
+        val gridLayoutManager = GridLayoutManager(baseContext, FIGHTER_PER_LINES)
+        lvl_select_recycler_view.layoutManager = gridLayoutManager
+        lvl_select_recycler_view.adapter = LvlSelectAdapter(baseContext, mutableListOf())
+        adapter = lvl_select_recycler_view.adapter as LvlSelectAdapter
     }
 
     override fun initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(ScoresViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(LvlSelectViewModel::class.java)
         viewModel.let { lifecycle.addObserver(it) }
     }
 
@@ -56,16 +55,16 @@ class ScoresActivity : BaseActivity(R.layout.activity_scores) {
             }
         })
 
-        viewModel.getLiveDataScores().observe(this, Observer { data ->
+        viewModel.getLiveDataLevels().observe(this, Observer { data ->
             if (data != null && data.isNotEmpty()) {
-                setupRecyclerView(data)
+                setupRecyclerView(data.map { it.second })
             } else {
                 showEmptyList()
             }
         })
     }
 
-    private fun setupRecyclerView(data: List<Score>) {
+    private fun setupRecyclerView(data: List<Level>) {
         adapter.data = data
     }
 

@@ -6,5 +6,5 @@ data class Fighter(
     val might: Int,
     val health: Int,
     val determination: Int,
-    val imageSet: Int
+    val portraitRes: Int
 )

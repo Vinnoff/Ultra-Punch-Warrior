@@ -2,9 +2,9 @@ package balekouy.industries.punchwarrior.data.models
 
 import balekouy.industries.punchwarrior.data.Difficulty
 
-data class Score(
-    val name: String,
+data class Level(
     val fighter: Pair<Int, Fighter>,
-    val difficulty: Difficulty,
-    val score: Int
+    val place: Pair<String, Int>,
+    val difficulty: Difficulty = Difficulty.NORMAL,
+    val isUnlocked: Boolean = true
 )

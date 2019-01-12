@@ -24,7 +24,7 @@
 						android:name=".presentation.scores.ScoresActivity"
 						android:screenOrientation="userLandscape" />
 				<activity
-						android:name=".presentation.levelselection.LevelSelectionActivity"
+                    android:name=".presentation.levelselection.LvlSelectActivity"
 						android:screenOrientation="userLandscape" />
 				<activity
 						android:name=".presentation.historymode.HistoryModeActivity"

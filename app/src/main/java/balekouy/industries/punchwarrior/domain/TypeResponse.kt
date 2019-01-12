@@ -12,9 +12,7 @@ class ErrorResponse<T>() : TypeResponse<T>() {
     }
 }
 
-interface ErrorCode
-
-enum class ScoreIdErrorCode : ErrorCode {
+enum class ErrorCode {
     NOT_FOUND,
     TECHNICAL_ERROR
 }

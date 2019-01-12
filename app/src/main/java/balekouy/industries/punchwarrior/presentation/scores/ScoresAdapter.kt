@@ -11,16 +11,22 @@ import balekouy.industries.punchwarrior.R
 import balekouy.industries.punchwarrior.data.models.Score
 import kotlinx.android.synthetic.main.item_score.view.*
 
-class ScoresAdapter(val context: Context, var listModel: List<Score>) :
-    RecyclerView.Adapter<ScoresAdapter.ViewHolder>() {
+class ScoresAdapter(val context: Context, listModel: List<Score>) : RecyclerView.Adapter<ScoresAdapter.ViewHolder>() {
+
+    var data: List<Score> = listModel
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_score, parent, false)
         return ViewHolder(context, itemView)
     }
 
-    override fun getItemCount() = listModel.size
+    override fun getItemCount() = data.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bindItem(listModel[position], position)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bindItem(data[position], position)
 
     class ViewHolder(val context: Context, itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindItem(model: Score, position: Int) {
@@ -37,7 +43,7 @@ class ScoresAdapter(val context: Context, var listModel: List<Score>) :
             with(itemView) {
                 score_name.text = model.name
                 score_value.text = model.score.toString()
-                model.fighter?.let { score_fighter.setImageDrawable(getDrawable(context, it.imageSet)) }
+                model.fighter.let { score_fighter.setImageDrawable(getDrawable(context, it.second.portraitRes)) }
                 score_level.text = model.difficulty.string
             }
         }

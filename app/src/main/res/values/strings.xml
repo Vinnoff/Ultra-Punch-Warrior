@@ -2,4 +2,5 @@
 	<string name="app_name">Ultra Punch Warrior</string>
 		<string name="title_level_selection">Choose your opponent</string>
 	<string name="title_scores">Hall Of Fame</string>
+    <string name="title_lvl_select">Opponent</string>
 </resources>

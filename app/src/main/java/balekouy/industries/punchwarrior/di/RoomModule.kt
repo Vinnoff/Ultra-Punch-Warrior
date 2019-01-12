@@ -30,11 +30,11 @@ class RoomModule {
                 Executors.newSingleThreadScheduledExecutor()
                     .execute {
                         roomData.roomDao().initFighters(DataProvider.createFighters())
-                        roomData.roomDao().initPlaces(DataProvider.createPlaces())
                         roomData.roomDao().initScores(DataProvider.createScores())
+                        roomData.roomDao().initLevels(DataProvider.createLevels())
                     }
             }
-        }).build()
+        }).fallbackToDestructiveMigration().build()
         return roomData
     }
 }
