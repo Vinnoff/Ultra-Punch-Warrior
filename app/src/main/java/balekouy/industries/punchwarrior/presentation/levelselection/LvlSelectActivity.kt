@@ -4,14 +4,17 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.GridLayoutManager
+import android.view.View
 import android.widget.Toast
 import balekouy.industries.punchwarrior.R
 import balekouy.industries.punchwarrior.data.models.Level
 import balekouy.industries.punchwarrior.presentation.BaseActivity
 import kotlinx.android.synthetic.main.activity_level_selection.*
 
-class LvlSelectActivity : BaseActivity(R.layout.activity_level_selection) {
+class LvlSelectActivity : BaseActivity(R.layout.activity_level_selection), LvlSelectAdapter.Listener {
+
     companion object {
         fun newIntent(context: Context): Intent {
             return Intent(context, LvlSelectActivity::class.java)
@@ -32,7 +35,7 @@ class LvlSelectActivity : BaseActivity(R.layout.activity_level_selection) {
     private fun initRecyclerView() {
         val gridLayoutManager = GridLayoutManager(baseContext, FIGHTER_PER_LINES)
         lvl_select_recycler_view.layoutManager = gridLayoutManager
-        lvl_select_recycler_view.adapter = LvlSelectAdapter(baseContext, mutableListOf())
+        lvl_select_recycler_view.adapter = LvlSelectAdapter(baseContext, mutableListOf(), this)
         adapter = lvl_select_recycler_view.adapter as LvlSelectAdapter
     }
 
@@ -46,21 +49,15 @@ class LvlSelectActivity : BaseActivity(R.layout.activity_level_selection) {
             viewState?.let {
                 when {
                     it.isError -> showError()
-                }
-                if (viewState.isLoading) {
-                    showLoading()
-                } else {
-                    hideLoading()
+                    it.isLoading -> showLoading()
+                    else -> hideLoading()
                 }
             }
         })
 
         viewModel.getLiveDataLevels().observe(this, Observer { data ->
-            if (data != null && data.isNotEmpty()) {
-                setupRecyclerView(data.map { it.second })
-            } else {
-                showEmptyList()
-            }
+            if (data != null && data.isNotEmpty()) setupRecyclerView(data.map { it.second })
+            else showEmptyList()
         })
     }
 
@@ -68,21 +65,24 @@ class LvlSelectActivity : BaseActivity(R.layout.activity_level_selection) {
         adapter.data = data
     }
 
-    private fun showLoading() {
-        Toast.makeText(this, "Loading", Toast.LENGTH_LONG).show()
+    override fun onLevelClick(position: Int, level: Level, transitionName: String, transitionView: View) {
+        startActivity(
+            LvlDescriptionActivity.newIntent(baseContext, level, transitionName),
+            ActivityOptionsCompat.makeSceneTransitionAnimation(this, transitionView, transitionName).toBundle()
+        )
+    }
+
+    override fun onLevelLocked(position: Int) {
+        Toast.makeText(baseContext, getString(R.string.level_locked_info), Toast.LENGTH_LONG).show()
+    }
+
+    override fun onLevelError(position: Int) {
 
     }
 
-    private fun hideLoading() {
-        Toast.makeText(this, "End Loading", Toast.LENGTH_LONG).show()
-
+    override fun showLoading() {
     }
 
-    private fun showEmptyList() {
-        Toast.makeText(this, "No Data", Toast.LENGTH_LONG).show()
-    }
-
-    private fun showError() {
-        Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
+    override fun hideLoading() {
     }
 }

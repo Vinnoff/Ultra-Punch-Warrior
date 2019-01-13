@@ -3,6 +3,7 @@ package balekouy.industries.punchwarrior.presentation
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.Toast
 
 abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,5 +47,23 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity() {
         window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+    }
+
+    open fun showLoading() {
+        Toast.makeText(this, "Loading", Toast.LENGTH_LONG).show()
+
+    }
+
+    open fun hideLoading() {
+        Toast.makeText(this, "End Loading", Toast.LENGTH_LONG).show()
+
+    }
+
+    open fun showEmptyList() {
+        Toast.makeText(this, "No Data", Toast.LENGTH_LONG).show()
+    }
+
+    open fun showError() {
+        Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
     }
 }

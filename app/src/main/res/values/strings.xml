@@ -1,6 +1,18 @@
 <resources>
-	<string name="app_name">Ultra Punch Warrior</string>
-		<string name="title_level_selection">Choose your opponent</string>
-	<string name="title_scores">Hall Of Fame</string>
+    <string name="app_name">Ultra Punch Warrior</string>
+    <string name="home_levels">Levels</string>
+    <string name="home_ascension">History</string>
+    <string name="home_scores">Scores</string>
+    <string name="title_level_selection">Choose your opponent</string>
+    <string name="title_scores">Hall Of Fame</string>
     <string name="title_lvl_select">Opponent</string>
+    <string name="character_locked">Locked</string>
+    <string name="level_locked_info">This Level is locked</string>
+    <string name="lvl_description_title_opponent">Opponent :</string>
+    <string name="lvl_description_title_place">Place :</string>
+    <string name="lvl_description_title_difficulty">Difficulty :</string>
+    <string name="lvl_description_title_speed">Speed :</string>
+    <string name="lvl_description_title_might">Might :</string>
+    <string name="lvl_description_title_health">Health :</string>
+    <string name="lvl_description_validate">Fight</string>
 </resources>

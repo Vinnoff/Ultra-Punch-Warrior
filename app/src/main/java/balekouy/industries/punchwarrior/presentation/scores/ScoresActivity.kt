@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.Toast
 import balekouy.industries.punchwarrior.R
 import balekouy.industries.punchwarrior.data.models.Score
 import balekouy.industries.punchwarrior.presentation.BaseActivity
@@ -47,11 +46,8 @@ class ScoresActivity : BaseActivity(R.layout.activity_scores) {
             viewState?.let {
                 when {
                     it.isError -> showError()
-                }
-                if (viewState.isLoading) {
-                    showLoading()
-                } else {
-                    hideLoading()
+                    it.isLoading -> showLoading()
+                    else -> hideLoading()
                 }
             }
         })
@@ -67,23 +63,5 @@ class ScoresActivity : BaseActivity(R.layout.activity_scores) {
 
     private fun setupRecyclerView(data: List<Score>) {
         adapter.data = data
-    }
-
-    private fun showLoading() {
-        Toast.makeText(this, "Loading", Toast.LENGTH_LONG).show()
-
-    }
-
-    private fun hideLoading() {
-        Toast.makeText(this, "End Loading", Toast.LENGTH_LONG).show()
-
-    }
-
-    private fun showEmptyList() {
-        Toast.makeText(this, "No Data", Toast.LENGTH_LONG).show()
-    }
-
-    private fun showError() {
-        Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
     }
 }

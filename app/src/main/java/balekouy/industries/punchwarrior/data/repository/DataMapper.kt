@@ -18,7 +18,7 @@ class DataMapper @Inject constructor(
         EScore(
             name = score.name,
             fighterId = fighterId,
-            difficulty = score.difficulty.id,
+            difficulty = score.difficulty?.id ?: 0,
             score = score.score
         )
 

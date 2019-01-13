@@ -44,7 +44,7 @@ class ScoresAdapter(val context: Context, listModel: List<Score>) : RecyclerView
                 score_name.text = model.name
                 score_value.text = model.score.toString()
                 model.fighter.let { score_fighter.setImageDrawable(getDrawable(context, it.second.portraitRes)) }
-                score_level.text = model.difficulty.string
+                score_level.text = model.difficulty?.string ?: "NONE"
             }
         }
     }

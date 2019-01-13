@@ -2,6 +2,7 @@ package balekouy.industries.punchwarrior.presentation.levelselection
 
 import android.content.Context
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,8 @@ import balekouy.industries.punchwarrior.R
 import balekouy.industries.punchwarrior.data.models.Level
 import kotlinx.android.synthetic.main.item_oponent.view.*
 
-class LvlSelectAdapter(val context: Context, data: List<Level>) : RecyclerView.Adapter<LvlSelectAdapter.ViewHolder>() {
+class LvlSelectAdapter(val context: Context, data: List<Level>, var listener: Listener) :
+    RecyclerView.Adapter<LvlSelectAdapter.ViewHolder>() {
 
     var data: List<Level> = data
         set(value) {
@@ -26,14 +28,45 @@ class LvlSelectAdapter(val context: Context, data: List<Level>) : RecyclerView.A
 
     override fun getItemCount() = data.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bindItem(data[position], position)
-
-    class ViewHolder(val context: Context, itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItem(model: Level, position: Int) {
-            with(itemView) {
-                lvl_fighter_name.text = model.fighter.second.name
-                lvl_image.setImageDrawable(ContextCompat.getDrawable(context, model.fighter.second.portraitRes))
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val model = data[position]
+        holder.bindItem(model, position)
+        ViewCompat.setTransitionName(holder.itemView.lvl_image, "id opponent ${model.fighter.first}")
+        holder.itemView.setOnClickListener { _ ->
+            if (model.isUnlocked) {
+                ViewCompat.getTransitionName(holder.itemView.lvl_image)?.let {
+                    listener.onLevelClick(position, model, it, holder.itemView.lvl_image)
+                } ?: also {
+                    listener.onLevelError(position)
+                }
+            } else {
+                listener.onLevelLocked(position)
             }
         }
+
+    }
+
+    class ViewHolder(val context: Context, itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        private var itemPosition: Int = -1
+
+        fun bindItem(model: Level, position: Int) {
+            itemPosition = position
+            with(itemView) {
+                if (model.isUnlocked) {
+                    lvl_fighter_name.text = model.fighter.second.name
+                    lvl_image.setImageDrawable(ContextCompat.getDrawable(context, model.fighter.second.portraitRes))
+                } else {
+                    lvl_fighter_name.visibility = View.GONE
+                    lvl_image.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lock))
+                }
+            }
+        }
+    }
+
+    interface Listener {
+        fun onLevelClick(position: Int, level: Level, transitionName: String, transitionView: View)
+        fun onLevelError(position: Int)
+        fun onLevelLocked(position: Int)
     }
 }
