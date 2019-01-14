@@ -55,7 +55,7 @@ class DataMapper @Inject constructor(
                 speed = eFighter.speed,
                 might = eFighter.might,
                 health = eFighter.health,
-                determination = eFighter.determination,
+                energy = eFighter.energy,
                 portraitRes = eFighter.imageSet
             )
         )

@@ -50,7 +50,7 @@ class LvlDescriptionActivity : BaseActivity(R.layout.activity_level_description)
         lvl_description_image.setImageDrawable(ContextCompat.getDrawable(this, level.fighter.second.portraitRes))
         lvl_description_name_value.text = level.fighter.second.name
         lvl_description_place_value.text = level.place.first
-        lvl_description_root.background = ContextCompat.getDrawable(this, level.place.second)
+        lvl_description_background.setImageDrawable(ContextCompat.getDrawable(this, level.place.second))
         lvl_description_speed_value.progress = level.fighter.second.speed * 10
         lvl_description_might_value.progress = level.fighter.second.might * 10
         lvl_description_health_value.progress = level.fighter.second.health * 10

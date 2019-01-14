@@ -50,20 +50,20 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity() {
     }
 
     open fun showLoading() {
-        Toast.makeText(this, "Loading", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
 
     }
 
     open fun hideLoading() {
-        Toast.makeText(this, "End Loading", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "End Loading", Toast.LENGTH_SHORT).show()
 
     }
 
     open fun showEmptyList() {
-        Toast.makeText(this, "No Data", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "No Data", Toast.LENGTH_SHORT).show()
     }
 
     open fun showError() {
-        Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
     }
 }

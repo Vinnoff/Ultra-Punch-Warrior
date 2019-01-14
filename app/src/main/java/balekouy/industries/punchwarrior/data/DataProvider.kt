@@ -18,12 +18,12 @@ object DataProvider {
     )
 
     fun createLevels(): List<ELevel> = listOf(
-        ELevel(1, "Simple Ring", R.drawable.background_home, true),
-        ELevel(2, "Simple Ring", R.drawable.background_home, true),
-        ELevel(3, "Simple Ring", R.drawable.background_home, true),
-        ELevel(4, "Simple Ring", R.drawable.background_home),
-        ELevel(5, "Simple Ring", R.drawable.background_home),
-        ELevel(6, "Simple Ring", R.drawable.background_home)
+        ELevel(1, "Simple Ring", R.drawable.background_place_minor_circuit, true),
+        ELevel(2, "Simple Ring", R.drawable.background_place_minor_circuit, true),
+        ELevel(3, "Simple Ring", R.drawable.background_place_major_circuit, true),
+        ELevel(4, "Simple Ring", R.drawable.background_place_major_circuit),
+        ELevel(5, "Simple Ring", R.drawable.background_place_world_circuit),
+        ELevel(6, "Simple Ring", R.drawable.background_place_world_circuit)
     )
 
     fun createScores(): List<EScore> = listOf(

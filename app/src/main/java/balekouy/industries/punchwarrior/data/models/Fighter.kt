@@ -7,6 +7,6 @@ data class Fighter(
     val speed: Int,
     val might: Int,
     val health: Int,
-    val determination: Int,
+    val energy: Int,
     val portraitRes: Int
 ) : Serializable

@@ -7,6 +7,18 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/lvl_description_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/background_place_minor_circuit" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_high_black" />
+
+    <ImageView
         android:id="@+id/lvl_description_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

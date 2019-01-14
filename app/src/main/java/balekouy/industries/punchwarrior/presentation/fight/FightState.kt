@@ -1,11 +1,20 @@
 package balekouy.industries.punchwarrior.presentation.fight
 
+import balekouy.industries.punchwarrior.presentation.fight.FightViewModel.Companion.ROUND_DURATION
+
 data class FightState(
     val placeId: Int = 0,
-    var timer: Int = 180,
+    var timer: Int = ROUND_DURATION,
     var round: Int = 1,
-    var winner: Winner = Winner.NONE,
+    var inBreak: Boolean = true,
+    var winner: String = Winner.NONE,
     val isLoading: Boolean
 ) {
-    enum class Winner { NONE, PLAYER, OPPONENT }
+
+    class Winner {
+        companion object {
+            const val NONE = "None"
+            const val PLAYER = "Player"
+        }
+    }
 }
