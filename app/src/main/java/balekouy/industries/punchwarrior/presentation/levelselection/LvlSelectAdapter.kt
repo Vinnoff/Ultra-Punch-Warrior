@@ -25,7 +25,6 @@ class LvlSelectAdapter(val context: Context, data: List<Level>, var listener: Li
         return ViewHolder(context, itemView)
     }
 
-
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

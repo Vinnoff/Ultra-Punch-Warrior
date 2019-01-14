@@ -10,6 +10,7 @@ import balekouy.industries.punchwarrior.R
 import balekouy.industries.punchwarrior.data.Difficulty
 import balekouy.industries.punchwarrior.data.models.Level
 import balekouy.industries.punchwarrior.presentation.BaseActivity
+import balekouy.industries.punchwarrior.presentation.fight.FightActivity
 import kotlinx.android.synthetic.main.activity_level_description.*
 
 class LvlDescriptionActivity : BaseActivity(R.layout.activity_level_description) {
@@ -36,7 +37,6 @@ class LvlDescriptionActivity : BaseActivity(R.layout.activity_level_description)
         level = intent.extras?.getSerializable(LEVEL) as Level
         difficulties = Difficulty.values()
         currentDifficulty = Difficulty.NORMAL
-
         super.onCreate(savedInstanceState)
     }
 
@@ -54,7 +54,6 @@ class LvlDescriptionActivity : BaseActivity(R.layout.activity_level_description)
         lvl_description_speed_value.progress = level.fighter.second.speed * 10
         lvl_description_might_value.progress = level.fighter.second.might * 10
         lvl_description_health_value.progress = level.fighter.second.health * 10
-
         lvl_description_difficulty_value.text = currentDifficulty.name
         lvl_description_difficulty_switch_left.setOnClickListener { _ ->
             if (currentDifficulty != difficulties.first())
@@ -67,7 +66,15 @@ class LvlDescriptionActivity : BaseActivity(R.layout.activity_level_description)
                 currentDifficulty = difficulties.single { it.id == currentDifficulty.id + 1 }
             checkArrows()
         }
-        lvl_description_validate.setOnClickListener { TODO() }
+        lvl_description_validate.setOnClickListener {
+            startActivity(
+                FightActivity.newIntent(
+                    baseContext,
+                    level,
+                    currentDifficulty.id
+                )
+            )
+        }
 
         supportStartPostponedEnterTransition()
     }

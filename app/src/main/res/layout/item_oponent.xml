@@ -19,7 +19,7 @@
             android:layout_height="100dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/profile_goku"
+            android:src="@drawable/portrait_goku"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"

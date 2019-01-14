@@ -9,12 +9,12 @@ import balekouy.industries.punchwarrior.data.database.entity.EScore
 object DataProvider {
 
     fun createFighters(): List<EFighter> = listOf(
-        EFighter("Old Smith", 3, 2, 2, 3, R.drawable.profile_goku),
-        EFighter("Big Buddy", 1, 4, 5, 3, R.drawable.profile_goku),
-        EFighter("Skinny Pete", 5, 1, 2, 3, R.drawable.profile_goku),
-        EFighter("Simple Sam", 5, 5, 5, 4, R.drawable.profile_goku),
-        EFighter("Strong Apple", 3, 6, 4, 7, R.drawable.profile_goku),
-        EFighter("Final Opponent", 10, 10, 10, 10, R.drawable.profile_goku)
+        EFighter("Old Smith", 3, 2, 2, 3, R.drawable.portrait_goku),
+        EFighter("Big Buddy", 1, 4, 5, 3, R.drawable.portrait_goku),
+        EFighter("Skinny Pete", 5, 1, 2, 3, R.drawable.portrait_goku),
+        EFighter("Simple Sam", 5, 5, 5, 4, R.drawable.portrait_goku),
+        EFighter("Strong Apple", 3, 6, 4, 7, R.drawable.portrait_goku),
+        EFighter("Final Opponent", 10, 10, 10, 10, R.drawable.portrait_goku)
     )
 
     fun createLevels(): List<ELevel> = listOf(

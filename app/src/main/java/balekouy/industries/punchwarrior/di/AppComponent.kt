@@ -1,5 +1,6 @@
 package balekouy.industries.punchwarrior.di
 
+import balekouy.industries.punchwarrior.presentation.fight.FightViewModel
 import balekouy.industries.punchwarrior.presentation.home.HomeViewModel
 import balekouy.industries.punchwarrior.presentation.levelselection.LvlSelectViewModel
 import balekouy.industries.punchwarrior.presentation.scores.ScoresViewModel
@@ -12,6 +13,7 @@ import javax.inject.Singleton
     fun inject(viewModel: HomeViewModel)
     fun inject(viewModel: LvlSelectViewModel)
     fun inject(viewModel: ScoresViewModel)
+    fun inject(viewModel: FightViewModel)
 }
 
 
