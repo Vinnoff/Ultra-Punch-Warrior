@@ -6,7 +6,7 @@ data class FightState(
     val placeId: Int = 0,
     var timer: Int = ROUND_DURATION,
     var round: Int = 1,
-    var inBreak: Boolean = true,
+    var inBreak: Boolean = false,
     var winner: String = Winner.NONE,
     val isLoading: Boolean
 ) {

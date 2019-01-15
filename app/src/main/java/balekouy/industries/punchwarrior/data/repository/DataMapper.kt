@@ -8,6 +8,7 @@ import balekouy.industries.punchwarrior.data.database.entity.EScore
 import balekouy.industries.punchwarrior.data.models.Fighter
 import balekouy.industries.punchwarrior.data.models.Level
 import balekouy.industries.punchwarrior.data.models.Score
+import balekouy.industries.punchwarrior.data.models.Sprite
 import javax.inject.Inject
 
 class DataMapper @Inject constructor(
@@ -56,7 +57,7 @@ class DataMapper @Inject constructor(
                 might = eFighter.might,
                 health = eFighter.health,
                 energy = eFighter.energy,
-                portraitRes = eFighter.imageSet
+                sprites = createSpriteNames(eFighter.name.mapAsLowerUnderScore())
             )
         )
 
@@ -79,4 +80,21 @@ class DataMapper @Inject constructor(
             )
         )
 
+    companion object {
+        fun createSpriteNames(name: String): Sprite =
+            Sprite(
+                portrait = "${name}_portrait",
+                normalMode = "${name}_normal",
+                leftPunchMode = "${name}_left_punch",
+                rightPunchMode = "${name}_right_punch",
+                leftDODGEMode = "${name}_left_dodge",
+                rightDODGEMode = "${name}_right_dodge",
+                leftPunchedMode = "${name}_left_punched",
+                rightPunchedMode = "${name}_right_punched",
+                KOMode = "${name}_ko",
+                victoryMode = "${name}_victory"
+            )
+    }
 }
+
+private fun String.mapAsLowerUnderScore(): String = this.toLowerCase().replace(' ', '_')

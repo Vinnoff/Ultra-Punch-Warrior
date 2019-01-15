@@ -13,24 +13,27 @@
         android:scaleType="centerCrop"
         tools:src="@drawable/background_place_minor_circuit" />
 
-    <ImageView
+    <pl.droidsonroids.gif.GifImageView
         android:id="@+id/opponent_sprite"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="350dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="30dp"
-        android:background="@color/color_accent"
+        android:layout_marginBottom="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:src="@drawable/aran_ryan_normal" />
 
-    <ImageView
+    <pl.droidsonroids.gif.GifImageView
         android:id="@+id/player_sprite"
-        android:layout_width="200dp"
-        android:layout_height="250dp"
+        android:layout_width="wrap_content"
+        android:layout_height="350dp"
         android:layout_marginRight="15dp"
-        android:alpha="0.4"
-        android:background="@color/color_primary"
+        android:adjustViewBounds="true"
+        android:alpha="0.6"
+        android:scaleType="centerCrop"
+        android:src="@drawable/player_normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
@@ -45,8 +48,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fight_timer"
-        tools:src="@drawable/portrait_player" />
+        app:layout_constraintTop_toTopOf="@+id/fight_timer"
+        tools:src="@drawable/player_portrait" />
 
     <ProgressBar
         android:id="@+id/player_health_bar"
@@ -57,10 +60,10 @@
         android:alpha="0.6"
         android:maxWidth="150dp"
         android:progressTint="@color/red"
-        app:layout_constraintBottom_toTopOf="@id/player_energy_bar"
-        app:layout_constraintLeft_toRightOf="@id/player_image"
-        app:layout_constraintRight_toLeftOf="@id/fight_timer"
-        app:layout_constraintTop_toTopOf="@id/player_image"
+        app:layout_constraintBottom_toTopOf="@+id/player_energy_bar"
+        app:layout_constraintLeft_toRightOf="@+id/player_image"
+        app:layout_constraintRight_toLeftOf="@+id/fight_timer"
+        app:layout_constraintTop_toTopOf="@+id/player_image"
         tools:progress="60" />
 
     <ProgressBar
@@ -73,10 +76,10 @@
         android:alpha="0.6"
         android:maxWidth="150dp"
         android:progressTint="@color/blue"
-        app:layout_constraintBottom_toTopOf="@id/player_special_bar"
-        app:layout_constraintLeft_toLeftOf="@id/player_health_bar"
-        app:layout_constraintRight_toRightOf="@id/player_health_bar"
-        app:layout_constraintTop_toBottomOf="@id/player_health_bar"
+        app:layout_constraintBottom_toTopOf="@+id/player_special_bar"
+        app:layout_constraintLeft_toLeftOf="@+id/player_health_bar"
+        app:layout_constraintRight_toRightOf="@+id/player_health_bar"
+        app:layout_constraintTop_toBottomOf="@+id/player_health_bar"
         tools:progress="30" />
 
     <ProgressBar
@@ -87,10 +90,10 @@
         android:alpha="0.6"
         android:maxWidth="150dp"
         android:progressTint="@color/power"
-        app:layout_constraintBottom_toBottomOf="@id/player_image"
-        app:layout_constraintLeft_toLeftOf="@id/player_health_bar"
-        app:layout_constraintRight_toRightOf="@id/player_health_bar"
-        app:layout_constraintTop_toBottomOf="@id/player_energy_bar"
+        app:layout_constraintBottom_toBottomOf="@+id/player_image"
+        app:layout_constraintLeft_toLeftOf="@+id/player_health_bar"
+        app:layout_constraintRight_toRightOf="@+id/player_health_bar"
+        app:layout_constraintTop_toBottomOf="@+id/player_energy_bar"
         tools:progress="90" />
 
     <ImageView
@@ -101,10 +104,10 @@
         android:adjustViewBounds="true"
         android:alpha="0.9"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="@id/player_image"
+        app:layout_constraintBottom_toBottomOf="@+id/player_image"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/player_image"
+        app:layout_constraintTop_toTopOf="@+id/player_image"
         tools:src="@drawable/portrait_goku" />
 
     <ProgressBar
@@ -117,10 +120,10 @@
         android:maxWidth="150dp"
         android:progressTint="@color/red"
         android:rotation="180"
-        app:layout_constraintBottom_toBottomOf="@id/player_health_bar"
-        app:layout_constraintLeft_toRightOf="@id/fight_round"
-        app:layout_constraintRight_toLeftOf="@id/opponent_image"
-        app:layout_constraintTop_toTopOf="@id/player_health_bar"
+        app:layout_constraintBottom_toBottomOf="@+id/player_health_bar"
+        app:layout_constraintLeft_toRightOf="@+id/fight_round"
+        app:layout_constraintRight_toLeftOf="@+id/opponent_image"
+        app:layout_constraintTop_toTopOf="@+id/player_health_bar"
         tools:progress="30" />
 
     <ProgressBar
@@ -132,10 +135,10 @@
         android:maxWidth="150dp"
         android:progressTint="@color/blue"
         android:rotation="180"
-        app:layout_constraintBottom_toBottomOf="@id/player_energy_bar"
-        app:layout_constraintLeft_toLeftOf="@id/opponent_health_bar"
-        app:layout_constraintRight_toRightOf="@id/opponent_health_bar"
-        app:layout_constraintTop_toTopOf="@id/player_energy_bar"
+        app:layout_constraintBottom_toBottomOf="@+id/player_energy_bar"
+        app:layout_constraintLeft_toLeftOf="@+id/opponent_health_bar"
+        app:layout_constraintRight_toRightOf="@+id/opponent_health_bar"
+        app:layout_constraintTop_toTopOf="@+id/player_energy_bar"
         tools:progress="80" />
 
     <TextView
@@ -147,10 +150,10 @@
         android:gravity="center"
         android:textAlignment="center"
         android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="@id/fight_round"
-        app:layout_constraintLeft_toRightOf="@id/player_health_bar"
-        app:layout_constraintRight_toLeftOf="@id/fight_separator"
-        app:layout_constraintTop_toTopOf="@id/fight_round"
+        app:layout_constraintBottom_toBottomOf="@+id/fight_round"
+        app:layout_constraintLeft_toRightOf="@+id/player_health_bar"
+        app:layout_constraintRight_toLeftOf="@+id/fight_separator"
+        app:layout_constraintTop_toTopOf="@+id/fight_round"
         tools:text="180" />
 
     <View
@@ -159,10 +162,10 @@
         android:layout_height="0dp"
         android:layout_margin="5dp"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/fight_round"
+        app:layout_constraintBottom_toBottomOf="@+id/fight_round"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fight_round" />
+        app:layout_constraintTop_toTopOf="@+id/fight_round" />
 
     <TextView
         android:id="@+id/fight_round"
@@ -173,27 +176,52 @@
         android:alpha="0.6"
         android:textAlignment="center"
         android:textSize="60sp"
-        app:layout_constraintLeft_toRightOf="@id/fight_separator"
-        app:layout_constraintRight_toLeftOf="@id/opponent_health_bar"
+        app:layout_constraintLeft_toRightOf="@+id/fight_separator"
+        app:layout_constraintRight_toLeftOf="@+id/opponent_health_bar"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="1" />
 
-    <View
+    <ImageView
         android:id="@+id/left_punch"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_margin="30dp"
-        android:background="@color/transparent_high_white"
+        android:alpha="0.6"
+        android:background="@drawable/background_icon"
+        android:src="@drawable/ic_fist_left"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <View
+    <ImageView
         android:id="@+id/right_punch"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_margin="30dp"
-        android:background="@color/transparent_high_white"
+        android:alpha="0.6"
+        android:src="@drawable/ic_fist_right"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageView
+        android:id="@+id/left_dodge"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginLeft="30dp"
+        android:alpha="0.6"
+        android:background="@drawable/background_icon"
+        android:src="@drawable/ic_dodge_right"
+        app:layout_constraintBottom_toBottomOf="@+id/left_punch"
+        app:layout_constraintLeft_toRightOf="@+id/left_punch" />
+
+    <ImageView
+        android:id="@+id/right_dodge"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginRight="30dp"
+        android:alpha="0.6"
+        android:background="@drawable/background_icon"
+        android:src="@drawable/ic_dodge_right"
+        app:layout_constraintBottom_toBottomOf="@+id/right_punch"
+        app:layout_constraintRight_toLeftOf="@+id/right_punch" />
 
 </android.support.constraint.ConstraintLayout>

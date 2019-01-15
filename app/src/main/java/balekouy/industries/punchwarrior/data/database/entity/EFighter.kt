@@ -10,8 +10,7 @@ data class EFighter(
     var speed: Int,
     var might: Int,
     var health: Int,
-    var energy: Int,
-    var imageSet: Int
+    var energy: Int
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

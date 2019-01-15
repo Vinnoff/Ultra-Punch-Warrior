@@ -9,21 +9,21 @@ import balekouy.industries.punchwarrior.data.database.entity.EScore
 object DataProvider {
 
     fun createFighters(): List<EFighter> = listOf(
-        EFighter("Old Smith", 3, 2, 2, 3, R.drawable.portrait_goku),
-        EFighter("Big Buddy", 1, 4, 5, 3, R.drawable.portrait_goku),
-        EFighter("Skinny Pete", 5, 1, 2, 3, R.drawable.portrait_goku),
-        EFighter("Simple Sam", 5, 5, 5, 4, R.drawable.portrait_goku),
-        EFighter("Strong Apple", 3, 6, 4, 7, R.drawable.portrait_goku),
-        EFighter("Final Opponent", 10, 10, 10, 10, R.drawable.portrait_goku)
+        EFighter("Gabby Jay", 3, 2, 2, 3),
+        EFighter("Bear Hugger", 1, 6, 5, 7),
+        EFighter("Narcis Prince", 8, 3, 2, 3),
+        EFighter("Aran Ryan", 5, 5, 5, 4),
+        EFighter("Rick Bruiser", 6, 6, 7, 7),
+        EFighter("Final Opponent", 10, 10, 10, 10)
     )
 
     fun createLevels(): List<ELevel> = listOf(
-        ELevel(1, "Simple Ring", R.drawable.background_place_minor_circuit, true),
-        ELevel(2, "Simple Ring", R.drawable.background_place_minor_circuit, true),
-        ELevel(3, "Simple Ring", R.drawable.background_place_major_circuit, true),
-        ELevel(4, "Simple Ring", R.drawable.background_place_major_circuit),
-        ELevel(5, "Simple Ring", R.drawable.background_place_world_circuit),
-        ELevel(6, "Simple Ring", R.drawable.background_place_world_circuit)
+        ELevel(1, "Minor Circuit", R.drawable.background_place_minor_circuit, true),
+        ELevel(2, "Minor Circuit", R.drawable.background_place_minor_circuit, true),
+        ELevel(3, "Major Circuit", R.drawable.background_place_major_circuit, true),
+        ELevel(4, "Major Circuit", R.drawable.background_place_major_circuit, true),
+        ELevel(5, "World Circuit", R.drawable.background_place_world_circuit),
+        ELevel(6, "Special Circuit", R.drawable.background_place_special_circuit)
     )
 
     fun createScores(): List<EScore> = listOf(

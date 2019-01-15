@@ -1,7 +1,8 @@
 package balekouy.industries.punchwarrior.presentation.fight
 
 class FighterState(
-    var portrait: Int,
+    var portraitRes: String,
+    var animationRes: String,
     health: Int = 100,
     energy: Int = 100,
     special: Int = 0,
@@ -9,7 +10,7 @@ class FighterState(
     var hasSpecial: Boolean = false,
     var leftGuard: Boolean = false,
     var rightGuard: Boolean = false,
-    var animation: PunchAnimation = PunchAnimation.NONE
+    var animation: FightAnimation = FightAnimation.NONE
 ) {
     var healthValue: Int = health
         set(value) {
@@ -39,6 +40,6 @@ class FighterState(
         }
 }
 
-enum class PunchAnimation {
-    NONE, LEFT_PUNCH, RIGHT_PUNCH, LEFT_PUNCHED, RIGHT_PUNCHED, LEFT_BLOCK, RIGHT_BLOCK, KO, VICTORY
+enum class FightAnimation {
+    NONE, LEFT_PUNCH, RIGHT_PUNCH, LEFT_PUNCHED, RIGHT_PUNCHED, LEFT_DODGE, RIGHT_DODGE, KO, VICTORY
 }

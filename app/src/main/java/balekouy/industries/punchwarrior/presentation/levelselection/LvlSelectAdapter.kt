@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import balekouy.industries.punchwarrior.R
 import balekouy.industries.punchwarrior.data.models.Level
+import balekouy.industries.punchwarrior.presentation.UPWUtils.Companion.getDrawableFromIdentifier
 import kotlinx.android.synthetic.main.item_oponent.view.*
 
 class LvlSelectAdapter(val context: Context, data: List<Level>, var listener: Listener) :
@@ -54,7 +55,12 @@ class LvlSelectAdapter(val context: Context, data: List<Level>, var listener: Li
             with(itemView) {
                 if (model.isUnlocked) {
                     lvl_fighter_name.text = model.fighter.second.name
-                    lvl_image.setImageDrawable(ContextCompat.getDrawable(context, model.fighter.second.portraitRes))
+                    lvl_image.setImageDrawable(
+                        getDrawableFromIdentifier(
+                            context,
+                            model.fighter.second.sprites.portrait
+                        )
+                    )
                 } else {
                     lvl_fighter_name.visibility = View.GONE
                     lvl_image.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lock))

@@ -2,13 +2,13 @@ package balekouy.industries.punchwarrior.presentation.scores
 
 import android.content.Context
 import android.support.v4.content.ContextCompat.getColor
-import android.support.v4.content.ContextCompat.getDrawable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import balekouy.industries.punchwarrior.R
 import balekouy.industries.punchwarrior.data.models.Score
+import balekouy.industries.punchwarrior.presentation.UPWUtils.Companion.getDrawableFromIdentifier
 import kotlinx.android.synthetic.main.item_score.view.*
 
 class ScoresAdapter(val context: Context, listModel: List<Score>) : RecyclerView.Adapter<ScoresAdapter.ViewHolder>() {
@@ -43,7 +43,14 @@ class ScoresAdapter(val context: Context, listModel: List<Score>) : RecyclerView
             with(itemView) {
                 score_name.text = model.name
                 score_value.text = model.score.toString()
-                model.fighter.let { score_fighter.setImageDrawable(getDrawable(context, it.second.portraitRes)) }
+                model.fighter.let {
+                    score_fighter.setImageDrawable(
+                        getDrawableFromIdentifier(
+                            context,
+                            it.second.sprites.portrait
+                        )
+                    )
+                }
                 score_level.text = model.difficulty?.string ?: "NONE"
             }
         }
