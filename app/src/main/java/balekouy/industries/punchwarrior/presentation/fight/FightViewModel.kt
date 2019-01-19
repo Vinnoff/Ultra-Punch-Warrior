@@ -3,12 +3,20 @@ package balekouy.industries.punchwarrior.presentation.fight
 import android.arch.lifecycle.MutableLiveData
 import android.os.CountDownTimer
 import android.os.Handler
+import android.util.Log
 import balekouy.industries.punchwarrior.data.Difficulty
 import balekouy.industries.punchwarrior.data.models.Fighter
 import balekouy.industries.punchwarrior.data.models.Level
+import balekouy.industries.punchwarrior.data.models.Score
 import balekouy.industries.punchwarrior.data.repository.DataMapper
 import balekouy.industries.punchwarrior.di.UltraPunchWarriorApplication
+import balekouy.industries.punchwarrior.domain.scores.ScoresUseCase
 import balekouy.industries.punchwarrior.presentation.BaseViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 
 class FightViewModel : BaseViewModel() {
@@ -25,11 +33,17 @@ class FightViewModel : BaseViewModel() {
 
         const val ROUND_DURATION = 10
         const val NB_ROUND = 3
+        private const val TAG = "ScoresViewModel"
     }
+
+    @Inject
+    lateinit var scoresUseCase: ScoresUseCase
+    private val compositeDisposable = CompositeDisposable()
 
     private val liveFightState: MutableLiveData<FightState> = MutableLiveData()
     private val livePlayerState: MutableLiveData<FighterState> = MutableLiveData()
     private val liveOpponentState: MutableLiveData<FighterState> = MutableLiveData()
+    private val liveDataState: MutableLiveData<FightDataState> = MutableLiveData()
     private val handler = Handler()
 
     private lateinit var level: Level
@@ -37,12 +51,16 @@ class FightViewModel : BaseViewModel() {
     private lateinit var player: FighterState
     private lateinit var opponent: FighterState
     private lateinit var opponentStats: Fighter
+    private lateinit var countDownTimer: CountDownTimer
+    private var score: Int = 0
+
     private var fightState: FightState
     private val playerSprite = DataMapper.createSpriteNames("player")
 
     init {
         initializeDagger(this)
-        fightState = FightState(isLoading = true)
+        fightState = FightState()
+        liveDataState.value = FightDataState(isDone = false, isError = false)
         liveFightState.value = fightState
     }
 
@@ -53,21 +71,17 @@ class FightViewModel : BaseViewModel() {
         this.difficulty = Difficulty.withId(difficultyId) ?: Difficulty.NORMAL
         player = FighterState(
             portraitRes = playerSprite.portrait,
-            animationRes = playerSprite.normalMode,
-            health = 100,
-            energy = 100
+            animationRes = playerSprite.normalMode
         )
         opponent = FighterState(
             portraitRes = opponentStats.sprites.portrait,
-            animationRes = opponentStats.sprites.normalMode,
-            health = 100,
-            energy = 100
+            animationRes = opponentStats.sprites.normalMode
         )
         livePlayerState.value = player
         liveOpponentState.value = opponent
-        fightState = FightState(placeId = level.place.second, isLoading = false)
+        fightState = FightState(placeRes = level.place.second)
         liveFightState.value = fightState
-        roundCountDown().start()
+        countDownTimer = roundCountDown().start()
     }
 
     private fun roundCountDown(): CountDownTimer {
@@ -78,48 +92,76 @@ class FightViewModel : BaseViewModel() {
             }
 
             override fun onFinish() {
-                fightState.timer = ROUND_DURATION
-                fightState.inBreak = true
-                fightState.round++
-                liveFightState.value = fightState
+                fightState.timer = 0
+                if (fightState.winner == FightState.Winner.NONE) {
+                    fightState.inBreak = true
+                    liveFightState.value = fightState
+                }
             }
         }
     }
 
     fun beginPlayerLeftPunch() {
-        player.animation = FightAnimation.LEFT_PUNCH
-        player.animationRes = playerSprite.leftPunchMode
+
+        if (player.energyValue > 0) {
+            player.animation = FightAnimation.LEFT_PUNCH
+            player.animationRes = playerSprite.leftPunchMode
+            handler.postDelayed({ checkIfPunch(isPlayer = true, isLeft = true) }, PLAYER_LEFT_DELAY)
+        } else {
+            player.animation = FightAnimation.TIRED
+        }
+        player.energyValue -= 5
         livePlayerState.value = player
-        handler.postDelayed({ checkIfPunch(isPlayer = true, isLeft = true) }, PLAYER_LEFT_DELAY)
     }
 
     fun beginPlayerRightPunch() {
-        player.animation = FightAnimation.RIGHT_PUNCH
-        player.animationRes = playerSprite.rightPunchMode
+        if (player.energyValue > 0) {
+            player.animation = FightAnimation.RIGHT_PUNCH
+            player.animationRes = playerSprite.rightPunchMode
+            handler.postDelayed({ checkIfPunch(isPlayer = true, isLeft = false) }, PLAYER_RIGHT_DELAY)
+        } else {
+            player.animation = FightAnimation.TIRED
+        }
+        player.energyValue -= 5
         livePlayerState.value = player
-        handler.postDelayed({ checkIfPunch(isPlayer = true, isLeft = false) }, PLAYER_RIGHT_DELAY)
     }
 
     fun beginPlayerLeftDODGE() {
-        player.animation = FightAnimation.LEFT_DODGE
-        player.animationRes = playerSprite.leftDODGEMode
+        if (player.energyValue > 0) {
+            player.animation = FightAnimation.LEFT_DODGE
+            player.animationRes = playerSprite.leftDODGEMode
+            player.leftDODGE = true
+            handler.postDelayed({ returnToNormal(true) }, 500)
+        } else {
+            player.animation = FightAnimation.TIRED
+        }
+        player.energyValue -= 5
         livePlayerState.value = player
-        handler.postDelayed({ returnToNormal(true) }, 1500)
     }
 
     fun beginPlayerRightDODGE() {
-        player.animation = FightAnimation.RIGHT_DODGE
-        player.animationRes = playerSprite.rightDODGEMode
+        if (player.energyValue > 0) {
+            player.animation = FightAnimation.RIGHT_DODGE
+            player.animationRes = playerSprite.rightDODGEMode
+            player.rightDODGE = true
+            handler.postDelayed({ returnToNormal(true) }, 500)
+        } else {
+            player.animation = FightAnimation.TIRED
+        }
+        player.energyValue -= 5
         livePlayerState.value = player
-        handler.postDelayed({ returnToNormal(true) }, 1500)
     }
 
     private fun returnToNormal(isPlayer: Boolean) {
         if (isPlayer) {
+            player.leftDODGE = false
+            player.rightDODGE = false
             player.animation = FightAnimation.NONE
             player.animationRes = playerSprite.normalMode
             livePlayerState.value = player
         } else {
+            opponent.leftDODGE = false
+            opponent.rightDODGE = false
             opponent.animation = FightAnimation.NONE
             opponent.animationRes = opponentStats.sprites.normalMode
             livePlayerState.value = opponent
@@ -127,24 +169,24 @@ class FightViewModel : BaseViewModel() {
     }
 
     private fun beginOpponentLeftPunch() {
+        opponent.energyValue -= 5
         handler.postDelayed({ checkIfPunch(isPlayer = false, isLeft = true) }, PLAYER_LEFT_DELAY) //TODO CHANGE DELAY
     }
 
     private fun beginOpponentRightPunch() {
+        opponent.energyValue -= 5
         handler.postDelayed({ checkIfPunch(isPlayer = false, isLeft = false) }, PLAYER_RIGHT_DELAY) //TODO CHANGE DELAY
     }
 
     private fun checkIfPunch(isPlayer: Boolean, isLeft: Boolean) {
         if (isPlayer) {
-            player.energyValue -= 5
-            if (if (isLeft) !opponent.leftGuard else !opponent.rightGuard || opponent.energyValue == 0)
+            if (if (isLeft) !opponent.leftDODGE else !opponent.rightDODGE || opponent.energyValue == 0)
                 successPunch(true, isLeft)
-            else blockedPunch(true, isLeft)
+            else DODGEdPunch(true, isLeft)
         } else {
-            opponent.energyValue -= 5
-            if (if (isLeft) !player.leftGuard else !player.rightGuard || player.energyValue == 0)
+            if (if (isLeft) !player.leftDODGE else !player.rightDODGE || player.energyValue == 0)
                 successPunch(false, isLeft)
-            else blockedPunch(false, isLeft)
+            else DODGEdPunch(false, isLeft)
         }
     }
 
@@ -163,8 +205,8 @@ class FightViewModel : BaseViewModel() {
                 player.animationRes = playerSprite.victoryMode
                 opponent.animation = FightAnimation.KO
                 opponent.animationRes = opponentStats.sprites.KOMode
+                endGame()
                 liveFightState.value = fightState
-                handler.removeCallbacksAndMessages(null)
             } else {
                 handler.postDelayed({
                     opponent.animation = FightAnimation.NONE
@@ -183,8 +225,12 @@ class FightViewModel : BaseViewModel() {
             player.specialValue -= 10
             if (player.healthValue <= 0) {
                 fightState.winner = opponentStats.name
+                opponent.animation = FightAnimation.VICTORY
+                opponent.animationRes = opponentStats.sprites.victoryMode
+                player.animation = FightAnimation.KO
+                player.animationRes = playerSprite.KOMode
+                endGame()
                 liveFightState.value = fightState
-                handler.removeCallbacksAndMessages(null)
             } else {
                 handler.postDelayed({
                     player.animation = FightAnimation.NONE
@@ -197,7 +243,12 @@ class FightViewModel : BaseViewModel() {
         }
     }
 
-    private fun blockedPunch(isPlayer: Boolean, isLeft: Boolean) {
+    private fun endGame() {
+        handler.removeCallbacksAndMessages(null)
+        countDownTimer.onFinish()
+    }
+
+    private fun DODGEdPunch(isPlayer: Boolean, isLeft: Boolean) {
         if (isPlayer) {
             opponent.energyValue -= if (isLeft) PLAYER_LEFT_FORCE / opponentStats.energy * 10 else PLAYER_RIGHT_FORCE / opponentStats.energy * 10
             player.specialValue += 2
@@ -209,10 +260,43 @@ class FightViewModel : BaseViewModel() {
         }
     }
 
+    fun setName(name: String) {
+        val disposable = scoresUseCase.saveScore(Score(name, level.fighter, difficulty, score))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(object : DisposableCompletableObserver() {
+                override fun onComplete() {
+                    liveDataState.value = FightDataState(isDone = true, isError = false)
+                }
+
+                override fun onError(t: Throwable) {
+                    liveDataState.value = FightDataState(isDone = true, isError = true)
+                    Log.e("Error $TAG", t.toString())
+                }
+            })
+        compositeDisposable.add(disposable)
+    }
+
     private fun initializeDagger(viewModel: FightViewModel) =
         UltraPunchWarriorApplication.appComponent.inject(viewModel)
 
     fun getLiveDataFightState() = liveFightState
     fun getLiveDataPlayerState() = livePlayerState
     fun getLiveDataOpponentState() = liveOpponentState
+    fun getLiveDataViewState() = liveDataState
+    fun newRound() {
+        if (fightState.winner == FightState.Winner.NONE) {
+            fightState.round++
+            fightState.inBreak = false
+            fightState.timer = ROUND_DURATION
+            opponent.healthValue += 10
+            opponent.energyValue += 30
+            player.healthValue += 10
+            player.energyValue += 30
+            liveFightState.value = fightState
+            livePlayerState.value = player
+            liveOpponentState.value = opponent
+            countDownTimer = roundCountDown().start()
+        }
+    }
 }

@@ -15,10 +15,10 @@ class DataMapper @Inject constructor(
     private val roomDataSource: RoomDataSource
 ) {
 
-    fun mapAsEScore(score: Score, fighterId: Int) =
+    fun mapAsEScore(score: Score) =
         EScore(
             name = score.name,
-            fighterId = fighterId,
+            fighterId = score.fighter.first,
             difficulty = score.difficulty?.id ?: 0,
             score = score.score
         )
@@ -65,7 +65,7 @@ class DataMapper @Inject constructor(
         Pair(
             eLevel.id, Level(
                 fighter = mapAsFighter(eFighter),
-                place = Pair(eLevel.placeName, eLevel.placeImageId),
+                place = Pair(eLevel.placeName, eLevel.placeName.mapAsLowerUnderScore()),
                 isUnlocked = eLevel.unlocked
             )
         )
@@ -85,6 +85,7 @@ class DataMapper @Inject constructor(
             Sprite(
                 portrait = "${name}_portrait",
                 normalMode = "${name}_normal",
+                tiredMode = "${name}_tired",
                 leftPunchMode = "${name}_left_punch",
                 rightPunchMode = "${name}_right_punch",
                 leftDODGEMode = "${name}_left_dodge",

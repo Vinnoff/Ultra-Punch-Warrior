@@ -25,7 +25,7 @@ class ScoresInteractor @Inject constructor(
             return@BiFunction DataResponse(response)
         })
 
-    override fun saveScore(id: Int, score: Score): Completable {
-        return scoresRepository.saveScore(mapper.mapAsEScore(score, id))
+    override fun saveScore(score: Score): Completable {
+        return scoresRepository.saveScore(mapper.mapAsEScore(score))
     }
 }

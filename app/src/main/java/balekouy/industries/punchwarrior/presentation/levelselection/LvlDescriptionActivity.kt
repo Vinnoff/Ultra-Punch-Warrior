@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.view.View
 import balekouy.industries.punchwarrior.R
 import balekouy.industries.punchwarrior.data.Difficulty
@@ -56,7 +55,7 @@ class LvlDescriptionActivity : BaseActivity(R.layout.activity_level_description)
         )
         lvl_description_name_value.text = level.fighter.second.name
         lvl_description_place_value.text = level.place.first
-        lvl_description_background.setImageDrawable(ContextCompat.getDrawable(baseContext, level.place.second))
+        lvl_description_background.setImageDrawable(getDrawableFromIdentifier(baseContext, level.place.second))
         lvl_description_speed_value.progress = level.fighter.second.speed * 10
         lvl_description_might_value.progress = level.fighter.second.might * 10
         lvl_description_health_value.progress = level.fighter.second.health * 10

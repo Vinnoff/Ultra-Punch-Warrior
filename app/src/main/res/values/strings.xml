@@ -15,4 +15,8 @@
     <string name="lvl_description_title_might">Might :</string>
     <string name="lvl_description_title_health">Health :</string>
     <string name="lvl_description_validate">Fight</string>
+    <string name="win">win</string>
+    <string name="loose">loose</string>
+    <string name="validate">Continue</string>
+    <string name="genneric_errror">Oops, une erreur est survenue</string>
 </resources>

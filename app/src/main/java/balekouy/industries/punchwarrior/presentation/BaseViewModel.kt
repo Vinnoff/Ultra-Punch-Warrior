@@ -9,6 +9,6 @@ abstract class BaseViewModel : ViewModel(), LifecycleObserver {
 
     internal fun setError(liveState: MutableLiveData<BaseViewState>, t: Throwable?, viewModel: String) {
         liveState.value = liveState.value?.copy(isLoading = false, isError = true)
-        Log.e("Error in $viewModel", t.toString())
+        Log.e("Error $viewModel", t.toString())
     }
 }

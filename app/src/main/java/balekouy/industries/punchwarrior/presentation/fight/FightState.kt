@@ -3,12 +3,11 @@ package balekouy.industries.punchwarrior.presentation.fight
 import balekouy.industries.punchwarrior.presentation.fight.FightViewModel.Companion.ROUND_DURATION
 
 data class FightState(
-    val placeId: Int = 0,
+    val placeRes: String = "",
     var timer: Int = ROUND_DURATION,
     var round: Int = 1,
     var inBreak: Boolean = false,
-    var winner: String = Winner.NONE,
-    val isLoading: Boolean
+    var winner: String = Winner.NONE
 ) {
 
     class Winner {

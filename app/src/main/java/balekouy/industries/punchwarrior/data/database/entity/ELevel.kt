@@ -8,7 +8,6 @@ import balekouy.industries.punchwarrior.data.database.RoomContract
 data class ELevel(
     val fighterId: Int,
     var placeName: String,
-    var placeImageId: Int,
     val unlocked: Boolean = false
 ) {
     @PrimaryKey(autoGenerate = true)

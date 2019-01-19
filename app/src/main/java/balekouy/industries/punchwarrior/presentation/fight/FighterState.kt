@@ -8,8 +8,8 @@ class FighterState(
     special: Int = 0,
     var isDown: Boolean = false,
     var hasSpecial: Boolean = false,
-    var leftGuard: Boolean = false,
-    var rightGuard: Boolean = false,
+    var leftDODGE: Boolean = false,
+    var rightDODGE: Boolean = false,
     var animation: FightAnimation = FightAnimation.NONE
 ) {
     var healthValue: Int = health
@@ -41,5 +41,5 @@ class FighterState(
 }
 
 enum class FightAnimation {
-    NONE, LEFT_PUNCH, RIGHT_PUNCH, LEFT_PUNCHED, RIGHT_PUNCHED, LEFT_DODGE, RIGHT_DODGE, KO, VICTORY
+    NONE, LEFT_PUNCH, RIGHT_PUNCH, LEFT_PUNCHED, RIGHT_PUNCHED, LEFT_DODGE, RIGHT_DODGE, KO, VICTORY, TIRED
 }

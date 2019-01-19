@@ -14,6 +14,12 @@ class HomeActivity : BaseActivity(R.layout.activity_home) {
         fun newIntent(context: Context): Intent {
             return Intent(context, HomeActivity::class.java)
         }
+
+        fun goBackToHome(context: Context) {
+            val intent = HomeActivity.newIntent(context)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            context.startActivity(intent)
+        }
     }
 
     override fun initUI() {

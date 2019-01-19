@@ -5,7 +5,7 @@ import java.io.Serializable
 
 data class Level(
     val fighter: Pair<Int, Fighter>,
-    val place: Pair<String, Int>,
+    val place: Pair<String, String>,
     val difficulty: Difficulty = Difficulty.NORMAL,
     val isUnlocked: Boolean = true
 ) : Serializable

@@ -67,6 +67,7 @@ dependencies {
     //UI Tricks
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.16'
+    implementation 'com.shawnlin:number-picker:2.4.6'
 
 }
 

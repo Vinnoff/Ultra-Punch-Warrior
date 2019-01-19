@@ -1,6 +1,5 @@
 package balekouy.industries.punchwarrior.data
 
-import balekouy.industries.punchwarrior.R
 import balekouy.industries.punchwarrior.data.database.entity.EFighter
 import balekouy.industries.punchwarrior.data.database.entity.ELevel
 import balekouy.industries.punchwarrior.data.database.entity.EScore
@@ -18,12 +17,12 @@ object DataProvider {
     )
 
     fun createLevels(): List<ELevel> = listOf(
-        ELevel(1, "Minor Circuit", R.drawable.background_place_minor_circuit, true),
-        ELevel(2, "Minor Circuit", R.drawable.background_place_minor_circuit, true),
-        ELevel(3, "Major Circuit", R.drawable.background_place_major_circuit, true),
-        ELevel(4, "Major Circuit", R.drawable.background_place_major_circuit, true),
-        ELevel(5, "World Circuit", R.drawable.background_place_world_circuit),
-        ELevel(6, "Special Circuit", R.drawable.background_place_special_circuit)
+        ELevel(1, "Minor Circuit", true),
+        ELevel(2, "Minor Circuit", true),
+        ELevel(3, "Major Circuit", true),
+        ELevel(4, "Major Circuit", true),
+        ELevel(5, "World Circuit"),
+        ELevel(6, "Special Circuit")
     )
 
     fun createScores(): List<EScore> = listOf(

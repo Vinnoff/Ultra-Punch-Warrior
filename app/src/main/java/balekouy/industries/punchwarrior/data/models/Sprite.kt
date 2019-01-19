@@ -5,6 +5,7 @@ import java.io.Serializable
 data class Sprite(
     val portrait: String,
     val normalMode: String,
+    val tiredMode: String,
     val leftPunchMode: String,
     val rightPunchMode: String,
     val leftDODGEMode: String,

@@ -14,11 +14,11 @@ import balekouy.industries.punchwarrior.presentation.BaseActivity
 import balekouy.industries.punchwarrior.presentation.UPWUtils.Companion.getDrawableFromIdentifier
 import balekouy.industries.punchwarrior.presentation.UPWUtils.Companion.getRessourceIdFromIdentifier
 import balekouy.industries.punchwarrior.presentation.fight.FightAnimation.*
+import balekouy.industries.punchwarrior.presentation.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_fight.*
-import pl.droidsonroids.gif.GifDrawable
 
 
-class FightActivity : BaseActivity(R.layout.activity_fight) {
+class FightActivity : BaseActivity(R.layout.activity_fight), EndDialog.OnContinueClickListener {
     companion object {
         private const val LEVEL = "level"
         private const val DIFFICULTY_ID = "difficulty_id"
@@ -32,9 +32,7 @@ class FightActivity : BaseActivity(R.layout.activity_fight) {
     }
 
     private lateinit var viewModel: FightViewModel
-    private var playerGif: GifDrawable? = null
-    private var opponentGif: GifDrawable? = null
-    private var winner = false
+    private lateinit var endDialog: EndDialog
     private var handler = Handler()
 
 
@@ -64,7 +62,6 @@ class FightActivity : BaseActivity(R.layout.activity_fight) {
             viewModel.beginPlayerRightDODGE()
             disablePlayerControls()
         }
-        player_sprite.setImageDrawable(playerGif)
     }
 
     override fun initViewModel() {
@@ -76,12 +73,11 @@ class FightActivity : BaseActivity(R.layout.activity_fight) {
         viewModel.getLiveDataFightState().observe(this, Observer { viewState ->
             viewState?.let {
                 when {
-                    it.isLoading -> showLoading()
+                    it.winner == FightState.Winner.PLAYER -> handler.postDelayed({ showPlayerWinner() }, 6000)
+                    it.winner != FightState.Winner.NONE -> handler.postDelayed({ showOpponentWinner(it.winner) }, 6000)
                     it.inBreak -> showRoundChange(it.round)
-                    it.winner == FightState.Winner.PLAYER -> showPlayerWinner()
-                    it.winner != FightState.Winner.NONE -> showOpponentWinner(it.winner)
                     else -> {
-                        fight_background.setImageResource(it.placeId)
+                        fight_background.setImageResource(getRessourceIdFromIdentifier(baseContext, it.placeRes))
                         fight_timer.text = it.timer.toString()
                         fight_round.text = it.round.toString()
                     }
@@ -107,6 +103,18 @@ class FightActivity : BaseActivity(R.layout.activity_fight) {
                 showOpponentAnimation(it.animation, it.animationRes)
             }
         })
+
+        viewModel.getLiveDataViewState().observe(this, Observer { baseState ->
+            baseState?.let {
+                when {
+                    it.isError -> {
+                        Toast.makeText(baseContext, getString(R.string.genneric_errror), Toast.LENGTH_LONG).show()
+                        HomeActivity.goBackToHome(baseContext) //that's racist ?
+                    }
+                    it.isDone -> HomeActivity.goBackToHome(baseContext) //that's racist ?
+                }
+            }
+        })
     }
 
 
@@ -116,78 +124,61 @@ class FightActivity : BaseActivity(R.layout.activity_fight) {
                 player_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
                 enablePlayerControls()
             }
-            LEFT_PUNCH -> {
+            TIRED -> {
                 player_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
+                enablePlayerControls()
+                Toast.makeText(baseContext, "You're tired !!!", Toast.LENGTH_SHORT).show()
             }
-            RIGHT_PUNCH -> {
+            LEFT_PUNCH,
+            RIGHT_PUNCH,
+            LEFT_DODGE,
+            RIGHT_DODGE,
+            LEFT_PUNCHED,
+            RIGHT_PUNCHED,
+            KO -> player_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
+            VICTORY -> handler.postDelayed({
                 player_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
-            }
-            LEFT_DODGE -> {
-                player_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
-            }
-            RIGHT_DODGE -> {
-                player_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
-            }
-            LEFT_PUNCHED -> {
-                player_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
-            }
-            RIGHT_PUNCHED -> {
-                player_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
-            }
-            KO, VICTORY -> {
-                handler.postDelayed({
-                    player_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
-                    player_sprite.alpha = 1F
-                }, 3000)
-
-            }
+                player_sprite.alpha = 1F
+            }, 3000)
         }
     }
 
     private fun showOpponentAnimation(state: FightAnimation, animationRes: String) {
         when (state) {
-            NONE -> {
-                opponent_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
-            }
-            LEFT_PUNCH -> {
-                opponent_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
-            }
-            RIGHT_PUNCH -> {
-                opponent_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
-            }
-            LEFT_DODGE -> {
-                opponent_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
-            }
-            RIGHT_DODGE -> {
-                opponent_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
-            }
-            LEFT_PUNCHED -> {
-                opponent_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
-            }
-            RIGHT_PUNCHED -> {
-                opponent_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
-            }
+            NONE,
+            TIRED,
+            LEFT_PUNCH,
+            RIGHT_PUNCH,
+            LEFT_DODGE,
+            RIGHT_DODGE,
+            LEFT_PUNCHED,
+            RIGHT_PUNCHED,
             KO -> {
                 opponent_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
             }
             VICTORY -> {
-                opponent_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
+                handler.postDelayed({
+                    opponent_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
+                    player_sprite.alpha = 1F
+                }, 3000)
             }
         }
     }
 
     private fun showRoundChange(round: Int) {
         Toast.makeText(baseContext, "Round Terminé", Toast.LENGTH_SHORT).show()
+        viewModel.newRound()
     }
 
     private fun showPlayerWinner() {
-        winner = true
         Toast.makeText(baseContext, "Player Win", Toast.LENGTH_SHORT).show()
         disablePlayerControls()
+        endDialog = EndDialog.newInstance(true, true, 9001)
+        endDialog.continueClickListener = this
+        endDialog.show(supportFragmentManager, null)
     }
 
     private fun showOpponentWinner(opponentName: String) {
-        winner = true
         Toast.makeText(baseContext, "$opponentName Win", Toast.LENGTH_SHORT).show()
         disablePlayerControls()
     }
@@ -204,5 +195,11 @@ class FightActivity : BaseActivity(R.layout.activity_fight) {
         right_punch.visibility = View.GONE
         left_dodge.visibility = View.GONE
         right_dodge.visibility = View.GONE
+    }
+
+    override fun onBackPressed() {}
+
+    override fun onContinueClick(name: String) {
+        viewModel.setName(name)
     }
 }
