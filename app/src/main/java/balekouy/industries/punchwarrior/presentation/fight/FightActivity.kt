@@ -1,11 +1,16 @@
 package balekouy.industries.punchwarrior.presentation.fight
 
+import android.Manifest
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.Toast
 import balekouy.industries.punchwarrior.R
@@ -15,11 +20,12 @@ import balekouy.industries.punchwarrior.presentation.UPWUtils.Companion.getDrawa
 import balekouy.industries.punchwarrior.presentation.UPWUtils.Companion.getRessourceIdFromIdentifier
 import balekouy.industries.punchwarrior.presentation.fight.FightAnimation.*
 import balekouy.industries.punchwarrior.presentation.home.HomeActivity
+import balekouy.industries.punchwarrior.ble.BleActionHandler
+import balekouy.industries.punchwarrior.ble.BleHandler
 import kotlinx.android.synthetic.main.activity_fight.*
 
+class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layout.activity_fight), EndDialog.OnContinueClickListener, BleActionHandler {
 
-class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layout.activity_fight),
-    EndDialog.OnContinueClickListener {
     companion object {
         private const val LEVEL = "level"
         private const val DIFFICULTY_ID = "difficulty_id"
@@ -36,11 +42,25 @@ class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layou
     private lateinit var endDialog: EndDialog
     private var handler = Handler()
     private var unlocked = false
-
+    private lateinit var bleHandler: BleHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         showLoading()
         super.onCreate(savedInstanceState)
+
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 0
+            )
+        }
+        bleHandler = BleHandler(this)
+
         viewModel.configureFight(
             intent.extras.getSerializable(LEVEL) as Level,
             intent.extras.getInt(DIFFICULTY_ID)
@@ -64,6 +84,20 @@ class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layou
             viewModel.beginPlayerRightDODGE()
             disablePlayerControls()
         }
+    }
+
+    override fun handleReceveidValue(actionValue: Short) {
+        if (actionValue <= 0 || actionValue > 4 || left_punch.visibility != View.VISIBLE)
+            return
+
+        when (actionValue.toInt()) {
+            1 -> runOnUiThread { viewModel.beginPlayerLeftPunch() }
+            2 -> runOnUiThread { viewModel.beginPlayerRightPunch() }
+            3 -> runOnUiThread { viewModel.beginPlayerLeftDODGE() }
+            4 -> runOnUiThread { viewModel.beginPlayerRightDODGE() }
+        }
+
+        disablePlayerControls()
     }
 
     override fun initViewModel() {
@@ -209,6 +243,9 @@ class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layou
         right_punch.visibility = View.VISIBLE
         left_dodge.visibility = View.VISIBLE
         right_dodge.visibility = View.VISIBLE
+        if (bleHandler != null) {
+            bleHandler.sendData(1)
+        }
     }
 
     private fun disablePlayerControls() {
