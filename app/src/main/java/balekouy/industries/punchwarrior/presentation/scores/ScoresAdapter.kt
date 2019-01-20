@@ -30,17 +30,18 @@ class ScoresAdapter(val context: Context, listModel: List<Score>) : RecyclerView
 
     class ViewHolder(val context: Context, itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindItem(model: Score, position: Int) {
-            when (position) {
-                Position.FIRST.ordinal -> itemView.score_root.setBackgroundColor(getColor(context, R.color.first_score))
-                Position.SECOND.ordinal -> itemView.score_root.setBackgroundColor(
-                    getColor(
-                        context,
-                        R.color.second_score
-                    )
-                )
-                Position.THIRD.ordinal -> itemView.score_root.setBackgroundColor(getColor(context, R.color.third_score))
-            }
             with(itemView) {
+                when (position) {
+                    Position.FIRST.ordinal -> score_root.setBackgroundColor(getColor(context, R.color.first_score))
+                    Position.SECOND.ordinal -> score_root.setBackgroundColor(
+                        getColor(
+                            context,
+                            R.color.second_score
+                        )
+                    )
+                    Position.THIRD.ordinal -> score_root.setBackgroundColor(getColor(context, R.color.third_score))
+                    else -> score_root.setBackgroundColor(getColor(context, R.color.transparent_high_white))
+                }
                 score_name.text = model.name
                 score_value.text = model.score.toString()
                 model.fighter.let {

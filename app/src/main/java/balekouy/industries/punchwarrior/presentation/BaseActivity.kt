@@ -52,21 +52,20 @@ abstract class BaseActivity(private val tag: String, private val layoutId: Int) 
     }
 
     open fun showLoading() {
-        Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
+        if (BuildConfig.DEBUG) Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
 
     }
 
     open fun hideLoading() {
-        Toast.makeText(this, "End Loading", Toast.LENGTH_SHORT).show()
-
+        if (BuildConfig.DEBUG) Toast.makeText(this, "End Loading", Toast.LENGTH_SHORT).show()
     }
 
     open fun showEmptyList() {
-        Toast.makeText(this, "No Data", Toast.LENGTH_SHORT).show()
+        if (BuildConfig.DEBUG) Toast.makeText(this, "No Data", Toast.LENGTH_SHORT).show()
     }
 
     open fun showError() {
-        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+        if (BuildConfig.DEBUG) Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
     }
 
     open fun log(string: String) {
