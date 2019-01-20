@@ -13,7 +13,8 @@ import balekouy.industries.punchwarrior.data.models.Level
 import balekouy.industries.punchwarrior.presentation.BaseActivity
 import kotlinx.android.synthetic.main.activity_level_selection.*
 
-class LvlSelectActivity : BaseActivity(R.layout.activity_level_selection), LvlSelectAdapter.Listener {
+class LvlSelectActivity : BaseActivity(LvlSelectActivity::class.java.simpleName, R.layout.activity_level_selection),
+    LvlSelectAdapter.Listener {
 
     companion object {
         fun newIntent(context: Context): Intent {
@@ -56,7 +57,7 @@ class LvlSelectActivity : BaseActivity(R.layout.activity_level_selection), LvlSe
         })
 
         viewModel.getLiveDataLevels().observe(this, Observer { data ->
-            if (data != null && data.isNotEmpty()) setupRecyclerView(data.map { it.second })
+            if (data != null && data.isNotEmpty()) setupRecyclerView(data)
             else showEmptyList()
         })
     }

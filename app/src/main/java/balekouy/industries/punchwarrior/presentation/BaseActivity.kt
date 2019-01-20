@@ -2,10 +2,12 @@ package balekouy.industries.punchwarrior.presentation
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import balekouy.industries.punchwarrior.BuildConfig
 
-abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity() {
+abstract class BaseActivity(private val tag: String, private val layoutId: Int) : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
@@ -65,5 +67,9 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity() {
 
     open fun showError() {
         Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+    }
+
+    open fun log(string: String) {
+        if (BuildConfig.DEBUG) Log.d(tag, string)
     }
 }

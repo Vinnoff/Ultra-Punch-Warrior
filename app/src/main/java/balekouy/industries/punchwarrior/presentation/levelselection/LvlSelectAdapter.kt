@@ -31,7 +31,7 @@ class LvlSelectAdapter(val context: Context, data: List<Level>, var listener: Li
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val model = data[position]
         holder.bindItem(model, position)
-        ViewCompat.setTransitionName(holder.itemView.lvl_image, "id opponent ${model.fighter.first}")
+        ViewCompat.setTransitionName(holder.itemView.lvl_image, "id opponent ${model.fighter.id}")
         holder.itemView.setOnClickListener { _ ->
             if (model.isUnlocked) {
                 ViewCompat.getTransitionName(holder.itemView.lvl_image)?.let {
@@ -54,11 +54,11 @@ class LvlSelectAdapter(val context: Context, data: List<Level>, var listener: Li
             itemPosition = position
             with(itemView) {
                 if (model.isUnlocked) {
-                    lvl_fighter_name.text = model.fighter.second.name
+                    lvl_fighter_name.text = model.fighter.name
                     lvl_image.setImageDrawable(
                         getDrawableFromIdentifier(
                             context,
-                            model.fighter.second.sprites.portrait
+                            model.fighter.sprites.portrait
                         )
                     )
                 } else {

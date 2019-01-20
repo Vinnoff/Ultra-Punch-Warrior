@@ -13,11 +13,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ScoresViewModel : BaseViewModel() {
-
-    companion object {
-        private const val TAG = "ScoresViewModel"
-    }
+class ScoresViewModel : BaseViewModel(ScoresViewModel::class.java.simpleName) {
 
     @Inject
     lateinit var scoresUseCase: ScoresUseCase
@@ -36,7 +32,7 @@ class ScoresViewModel : BaseViewModel() {
             .subscribe({ list ->
                 when (list) {
                     is DataResponse -> {
-                        liveListScore.value = list.data.map { it.second }
+                        liveListScore.value = list.data
                         liveState.value = liveState.value?.copy(isLoading = false, isError = false)
                     }
                     is ErrorResponse -> {
@@ -44,7 +40,7 @@ class ScoresViewModel : BaseViewModel() {
                     }
                 }
             }) { t: Throwable? ->
-                super.setError(liveState, t, TAG)
+                super.setError(liveState, t)
             }
         compositeDisposable.add(disposable)
     }

@@ -13,7 +13,8 @@ import balekouy.industries.punchwarrior.presentation.UPWUtils.Companion.getDrawa
 import balekouy.industries.punchwarrior.presentation.fight.FightActivity
 import kotlinx.android.synthetic.main.activity_level_description.*
 
-class LvlDescriptionActivity : BaseActivity(R.layout.activity_level_description) {
+class LvlDescriptionActivity :
+    BaseActivity(LvlDescriptionActivity::class.java.simpleName, R.layout.activity_level_description) {
     companion object {
         private const val LEVEL = "level"
 
@@ -50,15 +51,15 @@ class LvlDescriptionActivity : BaseActivity(R.layout.activity_level_description)
         lvl_description_image.setImageDrawable(
             getDrawableFromIdentifier(
                 baseContext,
-                level.fighter.second.sprites.portrait
+                level.fighter.sprites.portrait
             )
         )
-        lvl_description_name_value.text = level.fighter.second.name
+        lvl_description_name_value.text = level.fighter.name
         lvl_description_place_value.text = level.place.first
         lvl_description_background.setImageDrawable(getDrawableFromIdentifier(baseContext, level.place.second))
-        lvl_description_speed_value.progress = level.fighter.second.speed * 10
-        lvl_description_might_value.progress = level.fighter.second.might * 10
-        lvl_description_health_value.progress = level.fighter.second.health * 10
+        lvl_description_speed_value.progress = level.fighter.speed * 10
+        lvl_description_might_value.progress = level.fighter.might * 10
+        lvl_description_health_value.progress = level.fighter.health * 10
         lvl_description_difficulty_value.text = currentDifficulty.name
         lvl_description_difficulty_switch_left.setOnClickListener { _ ->
             if (currentDifficulty != difficulties.first())

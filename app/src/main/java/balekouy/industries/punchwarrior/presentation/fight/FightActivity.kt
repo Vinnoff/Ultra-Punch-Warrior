@@ -18,7 +18,8 @@ import balekouy.industries.punchwarrior.presentation.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_fight.*
 
 
-class FightActivity : BaseActivity(R.layout.activity_fight), EndDialog.OnContinueClickListener {
+class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layout.activity_fight),
+    EndDialog.OnContinueClickListener {
     companion object {
         private const val LEVEL = "level"
         private const val DIFFICULTY_ID = "difficulty_id"
@@ -34,6 +35,7 @@ class FightActivity : BaseActivity(R.layout.activity_fight), EndDialog.OnContinu
     private lateinit var viewModel: FightViewModel
     private lateinit var endDialog: EndDialog
     private var handler = Handler()
+    private var unlocked = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,8 +75,13 @@ class FightActivity : BaseActivity(R.layout.activity_fight), EndDialog.OnContinu
         viewModel.getLiveDataFightState().observe(this, Observer { viewState ->
             viewState?.let {
                 when {
-                    it.winner == FightState.Winner.PLAYER -> handler.postDelayed({ showPlayerWinner() }, 6000)
-                    it.winner != FightState.Winner.NONE -> handler.postDelayed({ showOpponentWinner(it.winner) }, 6000)
+                    it.winner == FightState.Winner.PLAYER -> handler.postDelayed({ showPlayerWinner(it.score) }, 6000)
+                    it.winner != FightState.Winner.NONE -> handler.postDelayed({
+                        showOpponentWinner(
+                            it.winner,
+                            it.score
+                        )
+                    }, 6000)
                     it.inBreak -> showRoundChange(it.round)
                     else -> {
                         fight_background.setImageResource(getRessourceIdFromIdentifier(baseContext, it.placeRes))
@@ -112,6 +119,16 @@ class FightActivity : BaseActivity(R.layout.activity_fight), EndDialog.OnContinu
                         HomeActivity.goBackToHome(baseContext) //that's racist ?
                     }
                     it.isDone -> HomeActivity.goBackToHome(baseContext) //that's racist ?
+                }
+            }
+        })
+
+        viewModel.getLiveDataUnlockedState().observe(this, Observer { unlockedState ->
+            unlockedState?.let {
+                when {
+                    it.isDone -> {
+                        unlocked = !it.isError
+                    }
                 }
             }
         })
@@ -170,15 +187,16 @@ class FightActivity : BaseActivity(R.layout.activity_fight), EndDialog.OnContinu
         viewModel.newRound()
     }
 
-    private fun showPlayerWinner() {
+    private fun showPlayerWinner(score: Int) {
         Toast.makeText(baseContext, "Player Win", Toast.LENGTH_SHORT).show()
         disablePlayerControls()
-        endDialog = EndDialog.newInstance(true, true, 9001)
+        log("showPlayerWinner")
+        endDialog = EndDialog.newInstance(true, unlocked, score)
         endDialog.continueClickListener = this
         endDialog.show(supportFragmentManager, null)
     }
 
-    private fun showOpponentWinner(opponentName: String) {
+    private fun showOpponentWinner(opponentName: String, score: Int) {
         Toast.makeText(baseContext, "$opponentName Win", Toast.LENGTH_SHORT).show()
         disablePlayerControls()
     }

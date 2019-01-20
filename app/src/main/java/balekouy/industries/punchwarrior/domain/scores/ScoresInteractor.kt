@@ -16,12 +16,12 @@ class ScoresInteractor @Inject constructor(
     private val fighterRepository: FighterRepository,
     private val mapper: DataMapper
 ) : ScoresUseCase {
-    override fun getAllScores(): Single<TypeResponse<List<Pair<Int, Score>>>> = Single.zip(
+    override fun getAllScores(): Single<TypeResponse<List<Score>>> = Single.zip(
         scoresRepository.getAllScores(),
         fighterRepository.getAllFighters(),
         BiFunction { dataScores, dataFighters ->
             val response = mapper.mapAsScores(dataScores, dataFighters)
-            response.sortByDescending { it.second.score }
+            response.sortByDescending { it.score }
             return@BiFunction DataResponse(response)
         })
 

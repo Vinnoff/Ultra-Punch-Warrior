@@ -3,13 +3,15 @@ package balekouy.industries.punchwarrior.presentation.fight
 import android.arch.lifecycle.MutableLiveData
 import android.os.CountDownTimer
 import android.os.Handler
-import android.util.Log
 import balekouy.industries.punchwarrior.data.Difficulty
 import balekouy.industries.punchwarrior.data.models.Fighter
 import balekouy.industries.punchwarrior.data.models.Level
 import balekouy.industries.punchwarrior.data.models.Score
 import balekouy.industries.punchwarrior.data.repository.DataMapper
 import balekouy.industries.punchwarrior.di.UltraPunchWarriorApplication
+import balekouy.industries.punchwarrior.domain.DataResponse
+import balekouy.industries.punchwarrior.domain.ErrorResponse
+import balekouy.industries.punchwarrior.domain.scores.LevelsUseCase
 import balekouy.industries.punchwarrior.domain.scores.ScoresUseCase
 import balekouy.industries.punchwarrior.presentation.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,7 +21,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
-class FightViewModel : BaseViewModel() {
+class FightViewModel : BaseViewModel(FightViewModel::class.java.simpleName) {
 
     companion object {
         private const val PLAYER_LEFT_FORCE = 6
@@ -33,17 +35,19 @@ class FightViewModel : BaseViewModel() {
 
         const val ROUND_DURATION = 10
         const val NB_ROUND = 3
-        private const val TAG = "ScoresViewModel"
     }
 
     @Inject
     lateinit var scoresUseCase: ScoresUseCase
+    @Inject
+    lateinit var levelsUseCase: LevelsUseCase
     private val compositeDisposable = CompositeDisposable()
 
     private val liveFightState: MutableLiveData<FightState> = MutableLiveData()
     private val livePlayerState: MutableLiveData<FighterState> = MutableLiveData()
     private val liveOpponentState: MutableLiveData<FighterState> = MutableLiveData()
     private val liveDataState: MutableLiveData<FightDataState> = MutableLiveData()
+    private val liveUnlockedState: MutableLiveData<FightDataState> = MutableLiveData()
     private val handler = Handler()
 
     private lateinit var level: Level
@@ -62,12 +66,13 @@ class FightViewModel : BaseViewModel() {
         fightState = FightState()
         liveDataState.value = FightDataState(isDone = false, isError = false)
         liveFightState.value = fightState
+        log("init() $fightState")
     }
 
 
     fun configureFight(level: Level, difficultyId: Int) {
         this.level = level
-        this.opponentStats = level.fighter.second
+        this.opponentStats = level.fighter
         this.difficulty = Difficulty.withId(difficultyId) ?: Difficulty.NORMAL
         player = FighterState(
             portraitRes = playerSprite.portrait,
@@ -81,6 +86,7 @@ class FightViewModel : BaseViewModel() {
         liveOpponentState.value = opponent
         fightState = FightState(placeRes = level.place.second)
         liveFightState.value = fightState
+        log("configureFight() $fightState")
         countDownTimer = roundCountDown().start()
     }
 
@@ -89,6 +95,7 @@ class FightViewModel : BaseViewModel() {
             override fun onTick(millisUntilEnd: Long) {
                 fightState.timer = (millisUntilEnd / 1000 + 1).toInt()
                 liveFightState.value = fightState
+                log("onTick() $fightState")
             }
 
             override fun onFinish() {
@@ -96,6 +103,7 @@ class FightViewModel : BaseViewModel() {
                 if (fightState.winner == FightState.Winner.NONE) {
                     fightState.inBreak = true
                     liveFightState.value = fightState
+                    log("onFinish() $fightState")
                 }
             }
         }
@@ -207,6 +215,7 @@ class FightViewModel : BaseViewModel() {
                 opponent.animationRes = opponentStats.sprites.KOMode
                 endGame()
                 liveFightState.value = fightState
+                log("playerWin() $fightState")
             } else {
                 handler.postDelayed({
                     opponent.animation = FightAnimation.NONE
@@ -231,6 +240,7 @@ class FightViewModel : BaseViewModel() {
                 player.animationRes = playerSprite.KOMode
                 endGame()
                 liveFightState.value = fightState
+                log("opponentWin() $fightState")
             } else {
                 handler.postDelayed({
                     player.animation = FightAnimation.NONE
@@ -245,7 +255,23 @@ class FightViewModel : BaseViewModel() {
 
     private fun endGame() {
         handler.removeCallbacksAndMessages(null)
-        countDownTimer.onFinish()
+        countDownTimer.cancel()
+        val unlockFighterDisposable = levelsUseCase.unlockLevel(level.id + 1)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                when (response) {
+                    is DataResponse -> {
+                        liveUnlockedState.value = liveUnlockedState.value?.copy(isDone = true, isError = false)
+                    }
+                    is ErrorResponse -> {
+                        liveUnlockedState.value = liveUnlockedState.value?.copy(isDone = true, isError = true)
+                    }
+                }
+            }) { t: Throwable? ->
+                log(t.toString())
+            }
+        compositeDisposable.add(unlockFighterDisposable)
     }
 
     private fun DODGEdPunch(isPlayer: Boolean, isLeft: Boolean) {
@@ -261,7 +287,7 @@ class FightViewModel : BaseViewModel() {
     }
 
     fun setName(name: String) {
-        val disposable = scoresUseCase.saveScore(Score(name, level.fighter, difficulty, score))
+        val scoreDisposable = scoresUseCase.saveScore(Score(null, name, level.fighter, difficulty, score))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : DisposableCompletableObserver() {
@@ -271,19 +297,13 @@ class FightViewModel : BaseViewModel() {
 
                 override fun onError(t: Throwable) {
                     liveDataState.value = FightDataState(isDone = true, isError = true)
-                    Log.e("Error $TAG", t.toString())
+                    log(t.toString())
                 }
             })
-        compositeDisposable.add(disposable)
+
+        compositeDisposable.add(scoreDisposable)
     }
 
-    private fun initializeDagger(viewModel: FightViewModel) =
-        UltraPunchWarriorApplication.appComponent.inject(viewModel)
-
-    fun getLiveDataFightState() = liveFightState
-    fun getLiveDataPlayerState() = livePlayerState
-    fun getLiveDataOpponentState() = liveOpponentState
-    fun getLiveDataViewState() = liveDataState
     fun newRound() {
         if (fightState.winner == FightState.Winner.NONE) {
             fightState.round++
@@ -294,9 +314,20 @@ class FightViewModel : BaseViewModel() {
             player.healthValue += 10
             player.energyValue += 30
             liveFightState.value = fightState
+            log("newRound() $fightState")
             livePlayerState.value = player
             liveOpponentState.value = opponent
             countDownTimer = roundCountDown().start()
         }
     }
+
+
+    private fun initializeDagger(viewModel: FightViewModel) =
+        UltraPunchWarriorApplication.appComponent.inject(viewModel)
+
+    fun getLiveDataFightState() = liveFightState
+    fun getLiveDataPlayerState() = livePlayerState
+    fun getLiveDataOpponentState() = liveOpponentState
+    fun getLiveDataViewState() = liveDataState
+    fun getLiveDataUnlockedState() = liveUnlockedState
 }

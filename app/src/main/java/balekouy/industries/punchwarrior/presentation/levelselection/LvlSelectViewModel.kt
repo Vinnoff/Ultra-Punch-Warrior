@@ -5,7 +5,7 @@ import balekouy.industries.punchwarrior.data.models.Level
 import balekouy.industries.punchwarrior.di.UltraPunchWarriorApplication
 import balekouy.industries.punchwarrior.domain.DataResponse
 import balekouy.industries.punchwarrior.domain.ErrorResponse
-import balekouy.industries.punchwarrior.domain.scores.LvlSelectUseCase
+import balekouy.industries.punchwarrior.domain.scores.LevelsUseCase
 import balekouy.industries.punchwarrior.presentation.BaseViewModel
 import balekouy.industries.punchwarrior.presentation.BaseViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,18 +13,15 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class LvlSelectViewModel : BaseViewModel() {
-    companion object {
-        private const val TAG = "LvlSelectViewModel"
-    }
+class LvlSelectViewModel : BaseViewModel(LvlSelectViewModel::class.java.simpleName) {
 
     @Inject
-    lateinit var lvlUseCase: LvlSelectUseCase
+    lateinit var lvlUseCase: LevelsUseCase
 
     private val compositeDisposable = CompositeDisposable()
 
     private val liveState: MutableLiveData<BaseViewState> = MutableLiveData()
-    private val liveListLevel: MutableLiveData<List<Pair<Int, Level>>> = MutableLiveData()
+    private val liveListLevel: MutableLiveData<List<Level>> = MutableLiveData()
 
     init {
         initializeDagger(this)
@@ -43,7 +40,7 @@ class LvlSelectViewModel : BaseViewModel() {
                     }
                 }
             }) { t: Throwable? ->
-                super.setError(liveState, t, TAG)
+                super.setError(liveState, t)
             }
         compositeDisposable.add(disposable)
 

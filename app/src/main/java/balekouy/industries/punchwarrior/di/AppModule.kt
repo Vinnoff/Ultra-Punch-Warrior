@@ -7,8 +7,8 @@ import balekouy.industries.punchwarrior.data.repository.levels.LevelsRepository
 import balekouy.industries.punchwarrior.data.repository.levels.LevelsRepositoryImpl
 import balekouy.industries.punchwarrior.data.repository.scores.ScoresRepository
 import balekouy.industries.punchwarrior.data.repository.scores.ScoresRepositoryImpl
-import balekouy.industries.punchwarrior.domain.lvlselection.LvlSelectInteractor
-import balekouy.industries.punchwarrior.domain.scores.LvlSelectUseCase
+import balekouy.industries.punchwarrior.domain.levels.LevelsInteractor
+import balekouy.industries.punchwarrior.domain.scores.LevelsUseCase
 import balekouy.industries.punchwarrior.domain.scores.ScoresInteractor
 import balekouy.industries.punchwarrior.domain.scores.ScoresUseCase
 import dagger.Module
@@ -36,7 +36,7 @@ class AppModule(private val application: UltraPunchWarriorApplication) {
 
     @Provides
     @Singleton
-    fun provideLvlSelectUseCase(instance: LvlSelectInteractor): LvlSelectUseCase = instance
+    fun provideLvlSelectUseCase(instance: LevelsInteractor): LevelsUseCase = instance
 
     @Provides
     @Singleton

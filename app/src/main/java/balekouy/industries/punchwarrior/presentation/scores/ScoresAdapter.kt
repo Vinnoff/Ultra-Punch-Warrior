@@ -47,7 +47,7 @@ class ScoresAdapter(val context: Context, listModel: List<Score>) : RecyclerView
                     score_fighter.setImageDrawable(
                         getDrawableFromIdentifier(
                             context,
-                            it.second.sprites.portrait
+                            it.sprites.portrait
                         )
                     )
                 }

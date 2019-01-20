@@ -6,6 +6,6 @@ import io.reactivex.Completable
 import io.reactivex.Single
 
 interface ScoresUseCase {
-    fun getAllScores(): Single<TypeResponse<List<Pair<Int, Score>>>>
+    fun getAllScores(): Single<TypeResponse<List<Score>>>
     fun saveScore(score: Score): Completable
 }

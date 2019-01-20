@@ -57,14 +57,13 @@ class EndDialog : BaseDialog() {
             root.end_winner_2.text = resources.getString(R.string.loose)
         }
 
-        val alphabet =
-            root.end_letter_picker_first.makeAlphabet()
-        root.end_letter_picker_second.makeAlphabet()
-        root.end_letter_picker_third.makeAlphabet()
+        root.end_letter_picker_first.configure()
+        root.end_letter_picker_second.configure()
+        root.end_letter_picker_third.configure()
 
         root.end_new_character.visibility = if (characterUnlocked) View.VISIBLE else View.GONE
 
-        root.end_validate.setOnClickListener { onContinueClick("${root.end_letter_picker_first.value}${root.end_letter_picker_second.value}${root.end_letter_picker_third.value}") }
+        root.end_validate.setOnClickListener { onContinueClick("${root.end_letter_picker_first.charValue()}${root.end_letter_picker_second.charValue()}${root.end_letter_picker_third.charValue()}") }
         return safeDialog()
     }
 
@@ -78,11 +77,14 @@ class EndDialog : BaseDialog() {
     }
 }
 
-private fun NumberPicker.makeAlphabet() {
+private fun NumberPicker.charValue(): String = displayedValues[value]
+
+private fun NumberPicker.configure() {
     minValue = 0
     displayedValues = ('A'..'Z')
         .toList()
         .map { it.toString() }
         .toTypedArray()
     maxValue = displayedValues.size - 1
+    value = minValue
 }

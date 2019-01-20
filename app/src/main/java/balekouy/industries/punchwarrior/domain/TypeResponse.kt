@@ -14,5 +14,6 @@ class ErrorResponse<T>() : TypeResponse<T>() {
 
 enum class ErrorCode {
     NOT_FOUND,
-    TECHNICAL_ERROR
+    TECHNICAL_ERROR,
+    NO_CHANGES
 }

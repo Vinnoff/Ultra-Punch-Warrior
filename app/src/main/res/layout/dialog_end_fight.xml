@@ -32,52 +32,54 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
-            android:textSize="60sp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="WIN" />
+            tools:text="@string/loose" />
 
         <com.shawnlin.numberpicker.NumberPicker
             android:id="@+id/end_letter_picker_first"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:background="@drawable/background_pickers"
-            android:padding="20dp"
             app:np_dividerColor="@color/transparent"
             app:np_dividerDistance="10dp"
             app:np_fadingEdgeEnabled="false"
             app:np_selectedTextColor="@color/white"
             app:np_selectedTextSize="60dp"
             app:np_textColor="@color/transparent_high_white"
+            app:np_textSize="40dp"
             app:np_wrapSelectorWheel="false" />
 
         <com.shawnlin.numberpicker.NumberPicker
             android:id="@+id/end_letter_picker_second"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:background="@drawable/background_pickers"
-            android:padding="20dp"
             app:np_dividerColor="@color/transparent"
             app:np_dividerDistance="10dp"
             app:np_fadingEdgeEnabled="false"
             app:np_selectedTextColor="@color/white"
             app:np_selectedTextSize="60dp"
             app:np_textColor="@color/transparent_high_white"
+            app:np_textSize="40dp"
             app:np_wrapSelectorWheel="false" />
 
         <com.shawnlin.numberpicker.NumberPicker
             android:id="@+id/end_letter_picker_third"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:background="@drawable/background_pickers"
-            android:padding="20dp"
             app:np_dividerColor="@color/transparent"
             app:np_dividerDistance="10dp"
             app:np_fadingEdgeEnabled="false"
             app:np_selectedTextColor="@color/white"
             app:np_selectedTextSize="60dp"
             app:np_textColor="@color/transparent_high_white"
+            app:np_textSize="40dp"
             app:np_wrapSelectorWheel="false" />
 
         <TextView
@@ -86,11 +88,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:textSize="60sp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="WIN" />
+            tools:text="@string/loose" />
     </LinearLayout>
 
     <TextView

@@ -1,8 +1,8 @@
 package balekouy.industries.punchwarrior.data.repository.levels
 
+import android.util.Log
 import balekouy.industries.punchwarrior.data.database.RoomDataSource
 import balekouy.industries.punchwarrior.data.database.entity.ELevel
-import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,6 +14,12 @@ class LevelsRepositoryImpl @Inject constructor(
     override fun getAllLevels(): Single<List<ELevel>> =
         roomDataSource.roomDao().getAllLevels()
 
-    override fun unlockLevel(eLevel: ELevel): Completable =
-        Completable.fromAction { roomDataSource.roomDao().unlockLevel(eLevel) }
+    override fun getLevel(id: Int) =
+        roomDataSource.roomDao().getLevelById(id).map { it: ELevel? ->
+            Log.d("roomLevel", it.toString())
+            return@map it
+        }
+
+    override fun updateLevel(levelId: Int) =
+        Single.just(roomDataSource.roomDao().unlockLevel(levelId))
 }

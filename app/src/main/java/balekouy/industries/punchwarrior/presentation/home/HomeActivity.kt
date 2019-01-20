@@ -9,7 +9,7 @@ import balekouy.industries.punchwarrior.presentation.levelselection.LvlSelectAct
 import balekouy.industries.punchwarrior.presentation.scores.ScoresActivity
 import kotlinx.android.synthetic.main.activity_home.*
 
-class HomeActivity : BaseActivity(R.layout.activity_home) {
+class HomeActivity : BaseActivity(HomeActivity::class.java.simpleName, R.layout.activity_home) {
     companion object {
         fun newIntent(context: Context): Intent {
             return Intent(context, HomeActivity::class.java)

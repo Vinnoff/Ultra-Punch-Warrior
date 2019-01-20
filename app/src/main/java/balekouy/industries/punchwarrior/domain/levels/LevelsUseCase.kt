@@ -4,8 +4,8 @@ import balekouy.industries.punchwarrior.data.models.Level
 import balekouy.industries.punchwarrior.domain.TypeResponse
 import io.reactivex.Single
 
-interface LvlSelectUseCase {
+interface LevelsUseCase {
 
-    fun getLevels(): Single<TypeResponse<List<Pair<Int, Level>>>>
-    fun deblockLevel(int: Int): Single<TypeResponse<Level>>
+    fun getLevels(): Single<TypeResponse<List<Level>>>
+    fun unlockLevel(id: Int): Single<TypeResponse<Void?>>
 }

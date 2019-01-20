@@ -18,13 +18,13 @@ class DataMapper @Inject constructor(
     fun mapAsEScore(score: Score) =
         EScore(
             name = score.name,
-            fighterId = score.fighter.first,
+            fighterId = score.fighter.id,
             difficulty = score.difficulty?.id ?: 0,
             score = score.score
         )
 
-    fun mapAsLevels(dataLevels: List<ELevel>, dataFighters: List<EFighter>): MutableList<Pair<Int, Level>> {
-        val response = mutableListOf<Pair<Int, Level>>()
+    fun mapAsLevels(dataLevels: List<ELevel>, dataFighters: List<EFighter>): MutableList<Level> {
+        val response = mutableListOf<Level>()
         if (dataLevels.isNotEmpty() && dataFighters.isNotEmpty())
             dataLevels.forEach { eLevel ->
                 response.add(
@@ -36,8 +36,8 @@ class DataMapper @Inject constructor(
         return response
     }
 
-    fun mapAsScores(dataScores: List<EScore>, dataFighters: List<EFighter>): MutableList<Pair<Int, Score>> {
-        val response = mutableListOf<Pair<Int, Score>>()
+    fun mapAsScores(dataScores: List<EScore>, dataFighters: List<EFighter>): MutableList<Score> {
+        val response = mutableListOf<Score>()
         if (dataScores.isNotEmpty() && dataFighters.isNotEmpty())
             dataScores.forEach { eScore ->
                 response.add(
@@ -50,34 +50,31 @@ class DataMapper @Inject constructor(
     }
 
     private fun mapAsFighter(eFighter: EFighter) =
-        Pair(
-            eFighter.id, Fighter(
-                name = eFighter.name,
-                speed = eFighter.speed,
-                might = eFighter.might,
-                health = eFighter.health,
-                energy = eFighter.energy,
-                sprites = createSpriteNames(eFighter.name.mapAsLowerUnderScore())
-            )
+        Fighter(
+            id = eFighter.id,
+            name = eFighter.name,
+            speed = eFighter.speed,
+            might = eFighter.might,
+            health = eFighter.health,
+            energy = eFighter.energy,
+            sprites = createSpriteNames(eFighter.name.mapAsLowerUnderScore())
         )
 
     private fun mapAsLevel(eLevel: ELevel, eFighter: EFighter) =
-        Pair(
-            eLevel.id, Level(
-                fighter = mapAsFighter(eFighter),
-                place = Pair(eLevel.placeName, eLevel.placeName.mapAsLowerUnderScore()),
-                isUnlocked = eLevel.unlocked
-            )
+        Level(
+            id = eLevel.id,
+            fighter = mapAsFighter(eFighter),
+            place = Pair(eLevel.placeName, eLevel.placeName.mapAsLowerUnderScore()),
+            isUnlocked = eLevel.unlocked
         )
 
     private fun mapAsScore(eScore: EScore, eFighter: EFighter) =
-        Pair(
-            eScore.id, Score(
-                name = eScore.name,
-                fighter = mapAsFighter(eFighter),
-                difficulty = Difficulty.withId(eScore.difficulty),
-                score = eScore.score
-            )
+        Score(
+            id = eScore.id,
+            name = eScore.name,
+            fighter = mapAsFighter(eFighter),
+            difficulty = Difficulty.withId(eScore.difficulty),
+            score = eScore.score
         )
 
     companion object {

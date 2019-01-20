@@ -1,6 +1,9 @@
 package balekouy.industries.punchwarrior.data.database
 
-import android.arch.persistence.room.*
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Delete
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.Query
 import balekouy.industries.punchwarrior.data.database.entity.EFighter
 import balekouy.industries.punchwarrior.data.database.entity.ELevel
 import balekouy.industries.punchwarrior.data.database.entity.EScore
@@ -41,7 +44,10 @@ interface RoomDao {
     @Insert
     fun initLevels(scores: List<ELevel>)
 
-    @Update
-    fun unlockLevel(eLevel: ELevel)
+    @Query("UPDATE level SET unlocked=1 WHERE id=:id")
+    fun unlockLevel(id: Int): Int
+
+    @Query(RoomContract.SELECT_LEVEL_BY_ID + ":id" + RoomContract.LIMIT_ONE)
+    fun getLevelById(id: Int): Single<ELevel?>
 }
 
