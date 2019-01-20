@@ -56,7 +56,6 @@ class FightViewModel : BaseViewModel(FightViewModel::class.java.simpleName) {
     private lateinit var opponent: FighterState
     private lateinit var opponentStats: Fighter
     private lateinit var countDownTimer: CountDownTimer
-    private var score: Int = 0
 
     private var fightState: FightState
     private val playerSprite = DataMapper.createSpriteNames("player")
@@ -190,21 +189,24 @@ class FightViewModel : BaseViewModel(FightViewModel::class.java.simpleName) {
         if (isPlayer) {
             if (if (isLeft) !opponent.leftDODGE else !opponent.rightDODGE || opponent.energyValue == 0)
                 successPunch(true, isLeft)
-            else DODGEdPunch(true, isLeft)
+            else DODGEdPunch(false, isLeft)
         } else {
             if (if (isLeft) !player.leftDODGE else !player.rightDODGE || player.energyValue == 0)
                 successPunch(false, isLeft)
-            else DODGEdPunch(false, isLeft)
+            else DODGEdPunch(true, isLeft)
         }
     }
 
     private fun successPunch(isPlayer: Boolean, isLeft: Boolean) {
         if (isPlayer) {
+            addToScore(100)
+            fightState.multiplicator += 0.2
             opponent.healthValue -= (if (isLeft) PLAYER_LEFT_FORCE / opponentStats.health * 10 else PLAYER_RIGHT_FORCE / opponentStats.health * 10)
             opponent.animation = if (isLeft) FightAnimation.LEFT_PUNCHED else FightAnimation.RIGHT_PUNCHED
             opponent.animationRes =
                     if (isLeft) opponentStats.sprites.leftPunchedMode else opponentStats.sprites.rightPunchedMode
             player.specialValue += 5
+            fightState.score
             player.animation = FightAnimation.NONE
             player.animationRes = playerSprite.normalMode
             if (opponent.healthValue <= 0) {
@@ -256,6 +258,7 @@ class FightViewModel : BaseViewModel(FightViewModel::class.java.simpleName) {
     private fun endGame() {
         handler.removeCallbacksAndMessages(null)
         countDownTimer.cancel()
+        addToScore(player.healthValue * 10 + player.energyValue * 10)
         val unlockFighterDisposable = levelsUseCase.unlockLevel(level.id + 1)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -280,6 +283,7 @@ class FightViewModel : BaseViewModel(FightViewModel::class.java.simpleName) {
             player.specialValue += 2
             liveOpponentState.value = opponent
             livePlayerState.value = player
+            addToScore(50)
         } else {
             player.energyValue -= opponentStats.might / PLAYER_ENERGY
             livePlayerState.value = player
@@ -287,7 +291,8 @@ class FightViewModel : BaseViewModel(FightViewModel::class.java.simpleName) {
     }
 
     fun setName(name: String) {
-        val scoreDisposable = scoresUseCase.saveScore(Score(null, name, level.fighter, difficulty, score))
+        val scoreDisposable =
+            scoresUseCase.saveScore(Score(null, name, level.fighter, difficulty, fightState.score.toInt()))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : DisposableCompletableObserver() {
@@ -319,6 +324,10 @@ class FightViewModel : BaseViewModel(FightViewModel::class.java.simpleName) {
             liveOpponentState.value = opponent
             countDownTimer = roundCountDown().start()
         }
+    }
+
+    private fun addToScore(i: Int) {
+        fightState.score += i * fightState.multiplicator * difficulty.multiplicator
     }
 
 

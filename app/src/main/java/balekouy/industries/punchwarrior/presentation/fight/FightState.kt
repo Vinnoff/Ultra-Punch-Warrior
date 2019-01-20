@@ -5,7 +5,8 @@ import balekouy.industries.punchwarrior.presentation.fight.FightViewModel.Compan
 data class FightState(
     val placeRes: String = "",
     var timer: Int = ROUND_DURATION,
-    val score: Int = 0,
+    var score: Double = 0.0,
+    var multiplicator: Double = 1.0,
     var round: Int = 1,
     var inBreak: Boolean = false,
     var winner: String = Winner.NONE

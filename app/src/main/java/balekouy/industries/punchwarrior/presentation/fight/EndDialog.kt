@@ -49,13 +49,7 @@ class EndDialog : BaseDialog() {
         root = activity!!.layoutInflater.inflate(R.layout.dialog_end_fight, null)
 
         root.end_score.text = score.toString()
-        if (didWin) {
-            root.end_winner.text = resources.getString(R.string.win)
-            root.end_winner_2.text = resources.getString(R.string.win)
-        } else {
-            root.end_winner.text = resources.getString(R.string.loose)
-            root.end_winner_2.text = resources.getString(R.string.loose)
-        }
+        root.end_winner.text = resources.getString(if (didWin) R.string.win else R.string.loose)
 
         root.end_letter_picker_first.configure()
         root.end_letter_picker_second.configure()
@@ -63,7 +57,13 @@ class EndDialog : BaseDialog() {
 
         root.end_new_character.visibility = if (characterUnlocked) View.VISIBLE else View.GONE
 
-        root.end_validate.setOnClickListener { onContinueClick("${root.end_letter_picker_first.charValue()}${root.end_letter_picker_second.charValue()}${root.end_letter_picker_third.charValue()}") }
+        root.end_validate.setOnClickListener {
+            onContinueClick(
+                root.end_letter_picker_first.charValue() +
+                        root.end_letter_picker_second.charValue() +
+                        root.end_letter_picker_third.charValue()
+            )
+        }
         return safeDialog()
     }
 

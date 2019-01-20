@@ -1,10 +1,10 @@
 package balekouy.industries.punchwarrior.data
 
-enum class Difficulty(val id: Int, val string: String, multiplicator: Float) {
-    EASY(1, "easy", 0.5F),
-    NORMAL(2, "normal", 1F),
-    HARD(3, "hard", 1.5F),
-    CHAMPION(4, "champion", 2F);
+enum class Difficulty(val id: Int, val string: String, val multiplicator: Double) {
+    EASY(1, "easy", 0.5),
+    NORMAL(2, "normal", 1.0),
+    HARD(3, "hard", 1.5),
+    CHAMPION(4, "champion", 2.0);
 
     companion object {
         fun withId(id: Int): Difficulty? {

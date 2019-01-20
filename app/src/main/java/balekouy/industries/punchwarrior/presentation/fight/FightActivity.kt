@@ -75,11 +75,14 @@ class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layou
         viewModel.getLiveDataFightState().observe(this, Observer { viewState ->
             viewState?.let {
                 when {
-                    it.winner == FightState.Winner.PLAYER -> handler.postDelayed({ showPlayerWinner(it.score) }, 6000)
+                    it.winner == FightState.Winner.PLAYER -> handler.postDelayed(
+                        { showPlayerWinner(it.score.toInt()) },
+                        6000
+                    )
                     it.winner != FightState.Winner.NONE -> handler.postDelayed({
                         showOpponentWinner(
                             it.winner,
-                            it.score
+                            it.score.toInt()
                         )
                     }, 6000)
                     it.inBreak -> showRoundChange(it.round)
