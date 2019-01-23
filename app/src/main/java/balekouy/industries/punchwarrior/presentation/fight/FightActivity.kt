@@ -1,7 +1,6 @@
 package balekouy.industries.punchwarrior.presentation.fight
 
 import android.Manifest
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -14,17 +13,18 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.Toast
 import balekouy.industries.punchwarrior.R
+import balekouy.industries.punchwarrior.ble.BleActionHandler
 import balekouy.industries.punchwarrior.data.models.Level
 import balekouy.industries.punchwarrior.presentation.BaseActivity
 import balekouy.industries.punchwarrior.presentation.UPWUtils.Companion.getDrawableFromIdentifier
+import balekouy.industries.punchwarrior.presentation.UPWUtils.Companion.getRandomIn
 import balekouy.industries.punchwarrior.presentation.UPWUtils.Companion.getRessourceIdFromIdentifier
 import balekouy.industries.punchwarrior.presentation.fight.FightAnimation.*
 import balekouy.industries.punchwarrior.presentation.home.HomeActivity
-import balekouy.industries.punchwarrior.ble.BleActionHandler
-import balekouy.industries.punchwarrior.ble.BleHandler
 import kotlinx.android.synthetic.main.activity_fight.*
 
-class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layout.activity_fight), EndDialog.OnContinueClickListener, BleActionHandler {
+class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layout.activity_fight),
+    EndDialog.OnContinueClickListener, BleActionHandler {
 
     companion object {
         private const val LEVEL = "level"
@@ -42,7 +42,7 @@ class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layou
     private lateinit var endDialog: EndDialog
     private var handler = Handler()
     private var unlocked = false
-    private lateinit var bleHandler: BleHandler
+    //private lateinit var bleHandler: BleHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         showLoading()
@@ -59,7 +59,7 @@ class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layou
                 arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 0
             )
         }
-        bleHandler = BleHandler(this)
+        //bleHandler = BleHandler(this)
 
         viewModel.configureFight(
             intent.extras.getSerializable(LEVEL) as Level,
@@ -68,6 +68,13 @@ class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layou
     }
 
     override fun initUI() {
+        startMusic(
+            getRessourceIdFromIdentifier(
+                baseContext,
+                folder = "raw",
+                resourceName = "fight_sound_${getRandomIn(1, 8)}"
+            )
+        )
         left_punch.setOnClickListener {
             viewModel.beginPlayerLeftPunch()
             disablePlayerControls()
@@ -198,17 +205,10 @@ class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layou
     }
 
     private fun showOpponentAnimation(state: FightAnimation, animationRes: String) {
+        opponent_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
         when (state) {
-            NONE,
-            TIRED,
-            LEFT_PUNCH,
-            RIGHT_PUNCH,
-            LEFT_DODGE,
-            RIGHT_DODGE,
-            LEFT_PUNCHED,
-            RIGHT_PUNCHED,
             KO -> {
-                opponent_sprite.setImageResource(getRessourceIdFromIdentifier(baseContext, animationRes))
+                startMusic(R.raw.really_not_rocky_victory_sound)
             }
             VICTORY -> {
                 handler.postDelayed({
@@ -243,9 +243,9 @@ class FightActivity : BaseActivity(FightActivity::class.java.simpleName, R.layou
         right_punch.visibility = View.VISIBLE
         left_dodge.visibility = View.VISIBLE
         right_dodge.visibility = View.VISIBLE
-        if (bleHandler != null) {
+        /*if (bleHandler != null) {
             bleHandler.sendData(1)
-        }
+        }*/
     }
 
     private fun disablePlayerControls() {

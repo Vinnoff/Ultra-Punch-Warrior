@@ -7,21 +7,27 @@ import android.view.View
 import android.widget.Toast
 import balekouy.industries.punchwarrior.BuildConfig
 
-abstract class BaseActivity(private val tag: String, private val layoutId: Int) : AppCompatActivity() {
+abstract class BaseActivity constructor(
+    private val tag: String,
+    private val layoutId: Int
+) : AppCompatActivity() {
+    private lateinit var soundPlayer: SoundPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
+        soundPlayer = SoundPlayer.getInstance(applicationContext)
         initUI()
         initViewModel()
         initObservers()
     }
+
 
     open fun initUI() {}
 
     open fun initObservers() {}
 
     open fun initViewModel() {}
-
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
@@ -70,5 +76,21 @@ abstract class BaseActivity(private val tag: String, private val layoutId: Int) 
 
     open fun log(string: String) {
         if (BuildConfig.DEBUG) Log.d(tag, string)
+    }
+
+    fun startMusic(musicId: Int) {
+        soundPlayer.startMusic(musicId)
+    }
+
+    fun pauseMusic() {
+        soundPlayer.pauseMusic()
+    }
+
+    fun restartMusic() {
+        soundPlayer.restartMusic()
+    }
+
+    fun stopMusic() {
+        soundPlayer.stopMusic()
     }
 }

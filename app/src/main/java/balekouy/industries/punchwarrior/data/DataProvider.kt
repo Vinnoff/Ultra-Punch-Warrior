@@ -12,8 +12,7 @@ object DataProvider {
         EFighter("Bear Hugger", 1, 6, 5, 7),
         EFighter("Narcis Prince", 8, 3, 2, 3),
         EFighter("Aran Ryan", 5, 5, 5, 4),
-        EFighter("Rick Bruiser", 6, 6, 7, 7),
-        EFighter("Final Opponent", 10, 10, 10, 10)
+        EFighter("Rick Bruiser", 6, 6, 7, 7)
     )
 
     fun createLevels(): List<ELevel> = listOf(
@@ -22,7 +21,7 @@ object DataProvider {
         ELevel(3, "Major Circuit", true),
         ELevel(4, "Major Circuit", true),
         ELevel(5, "World Circuit"),
-        ELevel(6, "Special Circuit")
+        ELevel(5, "Special Circuit")
     )
 
     fun createScores(): List<EScore> = listOf(

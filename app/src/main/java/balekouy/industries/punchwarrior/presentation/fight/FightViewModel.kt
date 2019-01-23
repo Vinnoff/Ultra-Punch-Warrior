@@ -340,12 +340,18 @@ class FightViewModel : BaseViewModel(FightViewModel::class.java.simpleName) {
         compositeDisposable.add(unlockFighterDisposable)
     }
 
-    private fun DODGEdPunch(isPlayer: Boolean) {
-        if (isPlayer) {
+    private fun DODGEdPunch(playerDODGE: Boolean) {
+        if (playerDODGE) {
             player.specialValue += 2
             livePlayerState.value = player
             addToScore(50)
-        }
+            opponentHandler.postDelayed({
+                returnToNormal(false)
+            }, 2000)
+        } else
+            playerHandler.postDelayed({
+                returnToNormal(true)
+            }, 2000)
     }
 
     fun setName(name: String) {

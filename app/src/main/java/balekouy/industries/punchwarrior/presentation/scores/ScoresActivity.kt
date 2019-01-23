@@ -23,6 +23,7 @@ class ScoresActivity : BaseActivity(ScoresActivity::class.java.simpleName, R.lay
 
 
     override fun initUI() {
+        startMusic(R.raw.really_not_rocky_victory_sound)
         scores_back.setOnClickListener { onBackPressed() }
         initRecyclerView()
     }
