@@ -1,5 +1,24 @@
 <resources>
-    <string name="app_name">PunchWarrior</string>
-		<string name="title_level_selection">Choose your opponent</string>
-		<string name="title_scores">Scores</string>
+    <string name="app_name">Ultra Punch Warrior</string>
+    <string name="home_levels">Levels</string>
+    <string name="home_ascension">History</string>
+    <string name="home_scores">Scores</string>
+    <string name="title_level_selection">Choose your opponent</string>
+    <string name="title_scores">Hall Of Fame</string>
+    <string name="title_lvl_select">Opponent</string>
+    <string name="character_locked">Locked</string>
+    <string name="level_locked_info">This Level is locked</string>
+    <string name="lvl_description_title_opponent">Opponent :</string>
+    <string name="lvl_description_title_place">Place :</string>
+    <string name="lvl_description_title_difficulty">Difficulty :</string>
+    <string name="lvl_description_title_speed">Speed :</string>
+    <string name="lvl_description_title_might">Might :</string>
+    <string name="lvl_description_title_health">Health :</string>
+    <string name="lvl_description_validate">Fight</string>
+    <string name="win">W\nI\nN</string>
+    <string name="you">Y\nO\nU</string>
+    <string name="loose">L\nO\nO\nS\nE</string>
+    <string name="validate">Continue</string>
+    <string name="genneric_errror">Oops, une erreur est survenue</string>
+    <string name="new_character_unclocked">* New Character Unclocked *</string>
 </resources>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent_high_black"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/end_score"
+        style="@style/AppTheme.Game.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textSize="60sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="9001" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            style="@style/AppTheme.Game.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textSize="40sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/you" />
+
+        <com.shawnlin.numberpicker.NumberPicker
+            android:id="@+id/end_letter_picker_first"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_pickers"
+            app:np_dividerColor="@color/transparent"
+            app:np_dividerDistance="10dp"
+            app:np_fadingEdgeEnabled="false"
+            app:np_selectedTextColor="@color/white"
+            app:np_selectedTextSize="60dp"
+            app:np_textColor="@color/transparent_high_white"
+            app:np_textSize="40dp" />
+
+        <com.shawnlin.numberpicker.NumberPicker
+            android:id="@+id/end_letter_picker_second"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_pickers"
+            app:np_dividerColor="@color/transparent"
+            app:np_dividerDistance="10dp"
+            app:np_fadingEdgeEnabled="false"
+            app:np_selectedTextColor="@color/white"
+            app:np_selectedTextSize="60dp"
+            app:np_textColor="@color/transparent_high_white"
+            app:np_textSize="40dp" />
+
+        <com.shawnlin.numberpicker.NumberPicker
+            android:id="@+id/end_letter_picker_third"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_pickers"
+            app:np_dividerColor="@color/transparent"
+            app:np_dividerDistance="10dp"
+            app:np_fadingEdgeEnabled="false"
+            app:np_selectedTextColor="@color/white"
+            app:np_selectedTextSize="60dp"
+            app:np_textColor="@color/transparent_high_white"
+            app:np_textSize="40dp" />
+
+        <TextView
+            android:id="@+id/end_winner"
+            style="@style/AppTheme.Game.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textSize="40sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/win" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/end_new_character"
+        style="@style/AppTheme.Game.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/new_character_unclocked"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/end_validate"
+        style="@style/AppTheme.Game.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/validate" />
+</LinearLayout>
